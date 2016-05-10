@@ -1,0 +1,31 @@
+version: '2'
+services:
+  db:
+    image: postgres:9.5
+    ports:
+     - "5432:5432"
+    environment:
+     - POSTGRES_USER=neighbormarket_dev
+     - POSTGRES_PASSWORD=neighbormarket
+    volumes:
+     - /opt/neighbormarket/data:/var/lib/postgresql/data
+  web:
+    build: .
+    restart: always
+    command: npm start
+    links:
+     - db
+    ports:
+     - "3000:3000"
+     - "5858:5858"
+    environment:
+     - NODE_ENV=development
+    volumes:
+     - ./:/opt/neighbormarket
+     - /opt/neighbormarket/node_modules
+     - /opt/neighbormarket/public/bower_components
+    links:
+     - db
+  
+  
+  
