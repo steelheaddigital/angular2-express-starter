@@ -1,5 +1,7 @@
 .vagrant
 .vscode
+.gulp-cache
 node_modules
 bower_components
 jsconfig.json
+jspm_packages

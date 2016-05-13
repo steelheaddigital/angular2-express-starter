@@ -17,7 +17,7 @@ RUN cd $(npm root -g)/npm \
 RUN npm install -g npm
 
 # Install Prerequisites
-RUN npm install --quiet -g knex gulp-cli bower karma-cli mocha
+RUN npm install --quiet -g knex gulp-cli jspm karma-cli mocha typings
 
 RUN mkdir /opt/neighbormarket
 WORKDIR /opt/neighbormarket
