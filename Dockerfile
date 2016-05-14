@@ -23,12 +23,15 @@ RUN mkdir /opt/neighbormarket
 WORKDIR /opt/neighbormarket
 
 ADD package.json /opt/neighbormarket/package.json
-ADD bower.json /opt/neighbormarket/bower.json
-ADD .bowerrc /opt/neighbormarket/.bowerrc
+ADD client/config.js /opt/neighbormarket/client/config.js
+ADD server/typings.json /opt/neighbormarket/server/typings.json
+
 
 # Install packages
 RUN npm install
-RUN bower install --allow-root --config.interactive=false
+RUN cd client && jspm install
+RUN cd server && typings 
+RUN gulp compile:all
 
 # Share local directory on the docker container
 ADD . /opt/neighbormarket

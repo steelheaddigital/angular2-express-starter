@@ -115,7 +115,9 @@ gulp.task('test:ui', function (done) {
   }, done).start();
 });
 
-gulp.task('watch', ['compile:server', 'compile:client', 'compile:sass'], function () {
+gulp.task('compile:all', ['compile:server', 'compile:client', 'compile:sass']);
+
+gulp.task('watch', ['compile:all'], function () {
   gulp.watch('client/app/*.scss', ['compile:sass']);
   gulp.watch('client/app/*.ts', ['compile:client']);
   var stream = nodemon({

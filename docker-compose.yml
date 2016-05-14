@@ -5,14 +5,14 @@ services:
     ports:
      - "5432:5432"
     environment:
-     - POSTGRES_USER=neighbormarket_dev
-     - POSTGRES_PASSWORD=neighbormarket
+     - POSTGRES_USER=${POSTGRES_USER}
+     - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     volumes:
      - /opt/neighbormarket/data:/var/lib/postgresql/data
   web:
     build: .
     restart: always
-    command: npm start
+    command: gulp watch #npm start
     links:
      - db
     ports:
@@ -20,10 +20,11 @@ services:
      - "5858:5858"
     environment:
      - NODE_ENV=development
+     - JSPM_GITHUB_AUTH_TOKEN=${JSPM_GITHUB_AUTH_TOKEN}
     volumes:
      - ./:/opt/neighbormarket
      - /opt/neighbormarket/node_modules
-     - /opt/neighbormarket/public/bower_components
+     - /opt/neighbormarket/client/jspm_packages
     links:
      - db
   
