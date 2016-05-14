@@ -6,7 +6,9 @@ System.config({
     "target": "es5",
     "module": "system",
     "emitDecoratorMetadata": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "inlineSourceMap": false
   },
   paths: {
     "github:*": "jspm_packages/github/*",
@@ -15,7 +17,7 @@ System.config({
 
   packages: {
     "app": {
-      "main": "app",
+      "main": "main",
       "format": "system",
       "defaultExtension": "ts",
       "meta": {
@@ -34,8 +36,10 @@ System.config({
 
   map: {
     "angular": "github:angular/bower-angular@1.5.5",
+    "angular-ui-router": "github:angular-ui/angular-ui-router-bower@0.2.18",
     "babel": "npm:babel-core@5.8.38",
     "babel-runtime": "npm:babel-runtime@5.8.38",
+    "bootstrap-sass": "github:twbs/bootstrap-sass@3.3.6",
     "chai": "npm:chai@3.5.0",
     "core-js": "npm:core-js@1.2.6",
     "crypto": "github:jspm/nodelibs-crypto@0.1.0",

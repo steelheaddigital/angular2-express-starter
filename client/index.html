@@ -9,7 +9,7 @@
   <title>Neighbor Market</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!--<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">-->
+  <link rel="stylesheet" href="dist/app.css">
 </head>
 <body>
 
@@ -17,12 +17,15 @@
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
   <![endif]-->
 
-  <app></app>
+  <app>
+    Loading...
+  </app>
 
   <script src="jspm_packages/system.js"></script>
-  <script src="config.js"></script>  
+  <script src="config.js"></script>
+  <script src="dist/main.bundle.js"></script>  
   <script>
-      System.import("app").catch(console.log.bind(console));
+      System.import("app/main").catch(console.log.bind(console));
   </script>
 </body>
 </html>

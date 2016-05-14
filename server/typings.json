@@ -2,7 +2,9 @@
   "ambientDependencies": {
     "chai": "registry:dt/chai#3.4.0+20160317120654",
     "express": "registry:dt/express#4.0.0+20160317120654",
+    "express-jwt": "registry:dt/express-jwt#0.0.0+20160319033732",
     "express-serve-static-core": "registry:dt/express-serve-static-core#0.0.0+20160322035842",
+    "express-unless": "registry:dt/express-unless#0.0.0+20160317120654",
     "mime": "registry:dt/mime#0.0.0+20160316155526",
     "mocha": "registry:dt/mocha#2.2.5+20160317120654",
     "node": "registry:dt/node#4.0.0+20160509154515",
