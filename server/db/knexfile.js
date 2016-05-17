@@ -3,7 +3,7 @@ module.exports = {
         client: 'pg',
         debug: true,
         connection: {
-            host     : 'db',
+            host     : 'development.neighbormarket.local',
             user     : 'neighbormarket_dev',
             password : 'neighbormarket',
             database : 'neighbormarket_dev',

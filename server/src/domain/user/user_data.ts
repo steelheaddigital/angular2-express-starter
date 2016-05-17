@@ -1,4 +1,4 @@
-var db = require('../../db/database');
+var db = require('../../../db/database');
 
 export class UserData{
     getUsers(){

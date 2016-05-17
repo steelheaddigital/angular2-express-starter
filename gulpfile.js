@@ -10,8 +10,8 @@ var sourcemaps = require('gulp-sourcemaps');
 var sass = require('gulp-sass');
 var rename = require('gulp-rename');
 var sassJspm = require('sass-jspm-importer');
+var path = require('path');
 var KarmaServer = require('karma').Server;
-var Cache = require('gulp-file-cache');
 var Builder = require('systemjs-builder');
 
 gulp.task('migrate:latest', function() {
@@ -63,32 +63,31 @@ gulp.task('migrate:make', function() {
 });
 
 gulp.task('compile:server', function() {
-  var cache = new Cache();
-  var tsProject = ts.createProject('server/tsconfig.json', {
+  var tsProject = ts.createProject('server/src/tsconfig.json', {
     allowJs: true
   });
   var stream = tsProject.src()
                         .pipe(sourcemaps.init())
-                        .pipe(cache.filter())
                         .pipe(ts(tsProject))
-                        .pipe(sourcemaps.write({includeContent: false, sourceRoot: function(file){ return file.cwd + '/server'; }}))
-                        .pipe(cache.cache()) // cache them
-                        .pipe(gulp.dest('./server/build')) // write them 
+                        .pipe(sourcemaps.write({sourceRoot: function (file) {
+                          var sourceFile = path.join(file.cwd + '/build/', file.sourceMap.file);
+                          return path.relative(path.dirname(sourceFile), file.cwd) + '/src/';
+                        }}))
+                        .pipe(gulp.dest('./server/build'))
   return stream // important for gulp-nodemon to wait for completion
 });
 
 gulp.task('compile:client', function(done){
   var builder = new Builder('./client', 'client/config.js');
-  // builder.loadConfig('client/config.js').then(function() {
-    builder.bundle('app/*.ts', './client/dist/main.bundle.js', { sourceMaps: true }).then(function() {
-        console.log('Build complete')
-        done();
-    })
-    .catch(function(err) {
-      console.log('Build error');
-      console.log(err);
+  builder.bundle('app/*.ts', './client/dist/main.bundle.js', { sourceMaps: true }).then(function() {
+      console.log('Build complete')
       done();
-    });
+  })
+  .catch(function(err) {
+    console.log('Build error');
+    console.log(err);
+    done();
+  });
 });
 
 gulp.task('compile:sass', function () {

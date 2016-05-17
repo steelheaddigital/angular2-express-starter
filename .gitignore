@@ -7,5 +7,5 @@ bower_components
 jsconfig.json
 jspm_packages
 /client/dist/
-/server/typings/
+/server/src/typings/
 /server/build/
