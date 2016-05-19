@@ -25,6 +25,7 @@
     "chai": "^3.5.0",
     "es6-module-loader": "^0.17.11",
     "gulp": "^3.9.1",
+    "gulp-develop-server": "^0.5.1",
     "gulp-mocha": "^2.2.0",
     "gulp-nodemon": "^2.0.7",
     "gulp-rename": "^1.2.2",

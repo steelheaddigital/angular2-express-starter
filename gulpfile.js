@@ -4,7 +4,7 @@ var gulp = require('gulp');
 var knex = require('./server/db/database');
 var args = require('minimist')(process.argv.slice(2));
 var mocha = require('gulp-mocha');
-var nodemon = require('gulp-nodemon');
+var server = require('gulp-develop-server');
 var ts = require('gulp-typescript');
 var sourcemaps = require('gulp-sourcemaps');
 var sass = require('gulp-sass');
@@ -16,7 +16,7 @@ var Builder = require('systemjs-builder');
 
 gulp.task('migrate:latest', function() {
   return knex.migrate.latest({
-    directory: './db/migrations'
+    directory: './server/db/migrations'
   })
   .then(function () {
     return knex.migrate.currentVersion();
@@ -33,7 +33,7 @@ gulp.task('migrate:latest', function() {
 
 gulp.task('migrate:rollback', function() {
   return knex.migrate.rollback({
-    directory: './db/migrations'
+    directory: './server/db/migrations'
   })
   .then(function () {
     return knex.migrate.currentVersion();
@@ -50,7 +50,7 @@ gulp.task('migrate:rollback', function() {
 
 gulp.task('migrate:make', function() {
   return knex.migrate.make(args.name, {
-    directory: './db/migrations'
+    directory: './server/db/migrations'
   })
   .then(function (version) {
     console.log("created migration");
@@ -62,29 +62,24 @@ gulp.task('migrate:make', function() {
   });
 });
 
-gulp.task('compile:server', function() {
-  var tsProject = ts.createProject('server/src/tsconfig.json', {
-    allowJs: true
-  });
-  var stream = tsProject.src()
-                        .pipe(sourcemaps.init())
-                        .pipe(ts(tsProject))
-                        .pipe(sourcemaps.write({sourceRoot: function (file) {
-                          var sourceFile = path.join(file.cwd + '/build/', file.sourceMap.file);
-                          return path.relative(path.dirname(sourceFile), file.cwd) + '/src/';
-                        }}))
-                        .pipe(gulp.dest('./server/build'))
-  return stream // important for gulp-nodemon to wait for completion
+gulp.task('test:server', ['compile:server'], function () {
+    return gulp.src(['server/build/test/**/*spec.js'])
+      .pipe(mocha());
+});
+
+gulp.task('test:ui', function (done) {
+  new KarmaServer({
+    configFile: __dirname + '/karma.conf.js',
+    singleRun: true
+  }, done).start();
 });
 
 gulp.task('compile:client', function(done){
   var builder = new Builder('./client', 'client/config.js');
   builder.bundle('app/*.ts', './client/dist/main.bundle.js', { sourceMaps: true }).then(function() {
-      console.log('Build complete')
       done();
   })
   .catch(function(err) {
-    console.log('Build error');
     console.log(err);
     done();
   });
@@ -102,31 +97,44 @@ gulp.task('compile:sass', function () {
     .pipe(gulp.dest('./client/dist'));
 });
 
-gulp.task('test:server', ['compile:server'], function () {
-    return gulp.src(['server/build/test/**/*spec.js'])
-      .pipe(mocha());
-});
+function compileServer(){
+  var tsProject = ts.createProject('server/src/tsconfig.json', {
+    allowJs: true
+  });
+  var stream = tsProject.src()
+                        .pipe(sourcemaps.init())
+                        .pipe(ts(tsProject))
+                        .pipe(sourcemaps.write({sourceRoot: function (file) {
+                          var sourceFile = path.join(file.cwd + '/build/', file.sourceMap.file);
+                          return path.relative(path.dirname(sourceFile), file.cwd) + '/src/';
+                        }}))
+                        .pipe(gulp.dest('./server/build'))
+  return stream // important for gulp-nodemon to wait for completion
+}
 
-gulp.task('test:ui', function (done) {
-  new KarmaServer({
-    configFile: __dirname + '/karma.conf.js',
-    singleRun: true
-  }, done).start();
+gulp.task('compile:server', function() {
+  return compileServer();
 });
 
 gulp.task('compile:all', ['compile:server', 'compile:client', 'compile:sass']);
 
-gulp.task('watch', ['compile:all'], function () {
-  gulp.watch('client/app/*.scss', ['compile:sass']);
-  gulp.watch('client/app/*.ts', ['compile:client']);
-  var stream = nodemon({
-    script: 'server/bin/www',
-    ext: 'js html ts',
-    env: { 'NODE_ENV': 'development' },
-    nodeArgs: ['--debug'],
-    watch: 'server',
-    tasks: ['compile:server', 'compile:client', 'compile:sass']
-  })
+gulp.watch('client/app/**/*.scss', ['compile:sass']);
+gulp.watch('client/app/**/*.ts', ['compile:client']);
 
+// run server
+gulp.task('server:start', ['compile:all'], function() {
+    server.listen( { path: './server/bin/www' } );
+});
+
+gulp.task( 'server:restart', function() {
+    var tsProject = ts.createProject('server/src/tsconfig.json', {
+    allowJs: true
+  });
+  var stream = compileServer()
+               .pipe(server())
   return stream
-})
+});
+
+gulp.task( 'default', [ 'server:start' ], function() {
+    gulp.watch( './server/src/**/*.ts', [ 'server:restart' ] );
+});

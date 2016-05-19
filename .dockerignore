@@ -1,0 +1,9 @@
+.vagrant
+.vscode
+.git
+.gitignore
+node_modules
+jspm_packages
+client/dist
+server/src/typings
+server/build

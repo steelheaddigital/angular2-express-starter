@@ -23,18 +23,20 @@ RUN mkdir /opt/neighbormarket
 WORKDIR /opt/neighbormarket
 
 ADD package.json /opt/neighbormarket/package.json
+ADD gulpfile.js /opt/neighbormarket/gulpfile.js
 ADD client/config.js /opt/neighbormarket/client/config.js
-ADD server/typings.json /opt/neighbormarket/server/typings.json
-
+ADD server/src/typings.json /opt/neighbormarket/server/src/typings.json
 
 # Install packages
 RUN npm install
 RUN cd client && jspm install
-RUN cd server && typings 
-RUN gulp compile:all
+RUN cd server/src && typings install
 
 # Share local directory on the docker container
 ADD . /opt/neighbormarket
+
+# Compile the app
+RUN gulp compile:all
 
 # Machine cleanup
 RUN npm cache clean

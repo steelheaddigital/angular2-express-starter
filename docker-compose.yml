@@ -12,7 +12,7 @@ services:
   web:
     build: .
     restart: always
-    command: gulp watch #npm start
+    command: gulp #npm start
     links:
      - db
     ports:
