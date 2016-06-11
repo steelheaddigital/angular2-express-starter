@@ -1,12 +1,14 @@
 {
+ "declaration": true,
+ "noExternalResolve": true,
  "compilerOptions": {
     "target": "es2015",
     "module": "commonjs",
     "sourceMap": true,
-    "allowJs": true
+    "experimentalDecorators": true
   },
   "exclude": [
-    "../node_modules",
+    "node_modules",
     "build",
     "typings/browser.d.ts",
     "typings/browser"

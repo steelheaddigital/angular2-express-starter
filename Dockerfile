@@ -17,26 +17,13 @@ RUN cd $(npm root -g)/npm \
 RUN npm install -g npm
 
 # Install Prerequisites
-RUN npm install --quiet -g knex gulp-cli jspm karma-cli mocha typings
+RUN npm install --quiet -g knex gulp-cli karma-cli mocha jspm typings
 
-RUN mkdir /opt/neighbormarket
-WORKDIR /opt/neighbormarket
-
-ADD package.json /opt/neighbormarket/package.json
-ADD gulpfile.js /opt/neighbormarket/gulpfile.js
-ADD client/config.js /opt/neighbormarket/client/config.js
-ADD server/src/typings.json /opt/neighbormarket/server/src/typings.json
-
-# Install packages
-RUN npm install
-RUN cd client && jspm install
-RUN cd server/src && typings install
+RUN mkdir /opt/app
+WORKDIR /opt/app
 
 # Share local directory on the docker container
-ADD . /opt/neighbormarket
-
-# Compile the app
-RUN gulp compile:all
+ADD . /opt/app
 
 # Machine cleanup
 RUN npm cache clean

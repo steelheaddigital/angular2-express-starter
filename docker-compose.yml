@@ -1,32 +1,35 @@
 version: '2'
 services:
+  app:
+    image: 'app:latest'
+    restart: always
+    volumes:
+     - ./:/opt/app
+     - /opt/app/node_modules
+     - /opt/app/client/jspm_packages
+    links:
+     - db
   db:
     image: postgres:9.5
-    ports:
-     - "5432:5432"
-    environment:
-     - POSTGRES_USER=${POSTGRES_USER}
-     - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-    volumes:
-     - /opt/neighbormarket/data:/var/lib/postgresql/data
-  web:
-    build: .
     restart: always
-    command: gulp #npm start
-    links:
-     - db
     ports:
-     - "3000:3000"
-     - "5858:5858"
+      - "5432:5432"
     environment:
-     - NODE_ENV=development
-     - JSPM_GITHUB_AUTH_TOKEN=${JSPM_GITHUB_AUTH_TOKEN}
+      POSTGRES_USER: $POSTGRES_USER
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
     volumes:
-     - ./:/opt/neighbormarket
-     - /opt/neighbormarket/node_modules
-     - /opt/neighbormarket/client/jspm_packages
+      - /opt/app/data:/var/lib/postgresql/data
+  web:
+    build:
+      context: .
+      dockerfile: nginx/Dockerfile
+    restart: always
+    volumes:
+     - ./client/dist:/usr/share/html
     links:
-     - db
+        - app:app
+    ports:
+        - "80:80"
   
   
   

@@ -3,7 +3,8 @@
 .env
 node_modules
 jsconfig.json
+npm-debug.log
 jspm_packages
 /client/dist/
-/server/src/typings/
+/server/typings/
 /server/build/

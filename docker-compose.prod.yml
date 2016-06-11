@@ -1,0 +1,11 @@
+version: '2'
+services:
+  app:
+    build: .
+    entrypoint: ['./prod-entrypoint.sh']
+    ports:
+     - "3000:3000"
+    environment:
+      NODE_ENV: production
+      JSPM_GITHUB_AUTH_TOKEN: $JSPM_GITHUB_AUTH_TOKEN
+

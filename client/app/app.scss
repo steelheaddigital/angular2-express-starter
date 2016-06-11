@@ -1,9 +1,3 @@
 @import "jspm:bootstrap-sass/assets/stylesheets/bootstrap";
-
-$font-stack:    Helvetica, sans-serif;
-$primary-color: #334;
-
-body {
-  font: 100% $font-stack;
-  color: $primary-color;
-}
+@import "shared/shared";
+@import "home/home.component"

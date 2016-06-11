@@ -4,9 +4,23 @@ module.exports = {
         debug: true,
         connection: {
             host     : 'db',
-            user     : 'neighbormarket_dev',
-            password : 'neighbormarket',
-            database : 'neighbormarket_dev',
+            user     : process.env.POSTGRES_USER,
+            password : process.env.POSTGRES_PASSWORD,
+            database : process.env.POSTGRES_USER,
+            charset  : 'utf8'
+        },
+        migrations: {
+            tableName: 'migrations'
+        }
+    },
+    production: {
+        client: 'pg',
+        debug: false,
+        connection: {
+            host     : 'db',
+            user     : process.env.POSTGRES_USER,
+            password : process.env.POSTGRES_PASSWORD,
+            database : process.env.POSTGRES_USER,
             charset  : 'utf8'
         },
         migrations: {
