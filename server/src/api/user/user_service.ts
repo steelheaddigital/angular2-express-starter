@@ -38,7 +38,7 @@ export class UserService{
     
     return this._db.createUser(user).then(id => {
       return {
-        id: id,
+        id: id[0],
         role: user.role
       };
     }); 
@@ -95,6 +95,10 @@ export class UserService{
       return result;
   }
   
+  public userExists(params: Object): Promise<boolean> {
+    return this._db.userExists(params);
+  }
+
   private makeSalt(byteSize: number = 16): string{    
     return crypto.randomBytes(byteSize).toString('base64');
   }

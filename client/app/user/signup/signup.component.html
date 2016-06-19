@@ -1,37 +1,46 @@
 <div class="container">
   <div class="row">
     <div class="col-sm-12">
-      <form *ngIf="active" (submit)="signup()" #signupForm="ngForm">
-        <div class="form-group">
-          <label>Name</label>
-          <input type="text" class="form-control" placeholder="Name" required 
-            [(ngModel)]="model.name" 
-            ngControl="name" #name="ngForm"/>
-          <div [hidden]="name.valid || name.pristine" class="alert alert-danger">
+      <form [ngFormModel]="signupForm" (submit)="signup()">
+        <div class="form-group" [ngClass]="{ 'has-error' : !name.valid && !name.pristine}" >
+          <label class="control-label" for="name">Name</label>
+          <input type="text" class="form-control" placeholder="Name" ngControl="name"/>
+          <div *ngIf="!name.valid && name.hasError('required') && !name.pristine" class="alert alert-danger">
             Name is required
           </div>
-        </div>
-        <div class="form-group">
-          <label>Email</label>
-          <input type="email" name="email" class="form-control" placeholder="Email" required
-            [(ngModel)]="model.email"
-            ngControl="email"  #email="ngForm" />
-          <div [hidden]="email.valid || email.pristine" class="alert alert-danger">
-            Name is required
+          <div *ngIf="!name.valid && name.hasError('serverValidation')" class="alert alert-danger">
+            {{serverValidations.name}}
+          </div>
+          <div *ngIf="!name.valid && name.hasError('nameTaken')" class="alert alert-danger">
+            Name is already taken
           </div>
         </div>
-        <div class="form-group">
-          <label>Password</label>
-          <input type="password" name="password" class="form-control" placeholder="Password" required 
-            [(ngModel)]="model.password" 
-            ngControl="password"  #password="ngForm"/>
-          <div [hidden]="password.valid || password.pristine" class="alert alert-danger">
+        <div class="form-group" [ngClass]="{ 'has-error' : !email.valid && !email.pristine}" >
+          <label class="control-label" for="email">Email</label>
+          <input type="email" class="form-control" placeholder="Email" ngControl="email" />
+          <div *ngIf="!email.valid && email.hasError('required') && !email.pristine" class="alert alert-danger">
+            Name is required
+          </div>
+          <div *ngIf="!email.valid && email.hasError('serverValidation')" class="alert alert-danger">
+            {{serverValidations.email}}
+          </div>
+          <div *ngIf="!email.valid && email.hasError('emailTaken')" class="alert alert-danger">
+            Email is already taken
+          </div>
+        </div>
+        <div class="form-group" [ngClass]="{ 'has-error' : !password.valid && !password.pristine}" >
+          <label class="control-label" for="password">Password</label>
+          <input type="password" class="form-control" placeholder="Password" ngControl="password"  />
+          <div *ngIf="!password.valid && password.hasError('required') && !password.pristine" class="alert alert-danger">
             Email is required
+          </div>
+          <div *ngIf="!password.valid && password.hasError('serverValidation')" class="alert alert-danger">
+            {{serverValidations.password}}
           </div>
         </div>
         <div>
           <button type="submit" class="btn btn-inverse btn-lg btn-register" 
-            [disabled]="!signupForm.form.valid">
+            [disabled]="!signupForm.valid">
             Sign Up
           </button>
         </div>

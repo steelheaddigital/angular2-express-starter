@@ -28,32 +28,40 @@ export class UserData{
     });
   }
 
-  public createUser(user: User){
+  public createUser(user: User): Promise<number>{
     return db('users')
-            .insert({
-              'name': user.name,
-              'email': user.email,
-              'role': user.role,
-              'password': user.password,
-              'salt': user.salt,
-              'provider': user.provider
-            })
+      .insert({
+        'name': user.name,
+        'email': user.email,
+        'role': user.role,
+        'password': user.password,
+        'salt': user.salt,
+        'provider': user.provider
+      })
+      .returning('id');
   }
 
   public destroyUser(id: number): Promise<void>{
     return db('users')
-            .where('id', id)
-            .del();
+      .where('id', id)
+      .del();
   }
 
-  public updatePassword(id: number, newPass: string, salt: string){
+  public updatePassword(id: number, newPass: string, salt: string): Promise<void>{
     return db('users')
-            .where('id', id)
-            .update({
-              'password': newPass,
-              'salt': salt,
-              'updated_at': new Date(new Date().getTime())
-            });
+      .where('id', id)
+      .update({
+        'password': newPass,
+        'salt': salt,
+        'updated_at': new Date(new Date().getTime())
+      });
+  }
+
+  public userExists(params: Object): Promise<boolean> {
+    let subQuery = db('users').select().where(params);
+    return db.select(db.raw(subQuery).wrap('exists (', ')')).then(rows => {
+      return rows[0];
+    })
   }
   
   private mapUser(row): User{

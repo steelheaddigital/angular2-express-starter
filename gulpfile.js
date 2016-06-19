@@ -196,11 +196,9 @@ gulp.task('server:start', ['compile:all'], function() {
   server.listen( { path: './server/bin/www', execArgv: ['--debug'] } );
 });
 
-gulp.task( 'server:restart', function() {
-    var tsProject = ts.createProject('server/tsconfig.json', {
-    allowJs: true
-  });
+gulp.task( 'server:restart', ['clean:server'], function() {
   var stream = compileServer()
+               .pipe(gulp.dest('./server/build'))
                .pipe(server())
   return stream
 });

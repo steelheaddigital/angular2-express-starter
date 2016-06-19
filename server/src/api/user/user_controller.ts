@@ -66,7 +66,7 @@ export class UserController{
       }
       res.jsend.success(user.profile());
     })
-    .catch(next);;
+    .catch(next);
   };
 
   /* POST create user */
@@ -77,9 +77,19 @@ export class UserController{
     user.password = req.body.password;
     
     this._userService.createUser(user).then(authToken => {
+      console.log(authToken)
       let token = this._authService.signToken(authToken);
       res.jsend.success({ token })
     })
     .catch(next);
   };
+
+  /* GET exists */
+  public exists = (req: Request, res: Response, next: NextFunction) => {
+    let params = req.query;
+    this._userService.userExists(params).then(exists => {
+      res.jsend.success(exists);
+    })
+    .catch(next)
+  }
 }

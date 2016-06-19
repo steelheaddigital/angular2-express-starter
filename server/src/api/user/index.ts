@@ -14,8 +14,9 @@ var userController = new UserController(userService, authService);
 router.get('/', authService.hasRole('admin'), userController.index);
 router.delete('/:id', authService.hasRole('admin'), userController.destroy);
 router.get('/me', authService.isAuthenticated(), userController.me);
-router.put('/:id/password', authService.isAuthenticated(), userController.updatePassword);
-router.get('/:id', authService.isAuthenticated(), userController.show);
+router.put('/password', authService.isAuthenticated(), userController.updatePassword);
+router.get('/:id(\\d+)', authService.isAuthenticated(), userController.show);
 router.post('/', userController.create);
+router.get('/exists', userController.exists);
 
 module.exports = router;

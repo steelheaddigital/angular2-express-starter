@@ -1,5 +1,6 @@
 import { Observable } from 'rxjs/Observable';
-import { Response } from '@angular/http';
+import { Response, Headers, RequestOptions } from '@angular/http';
+import 'rxjs/add/observable/throw';
 
 export class BaseService {
   protected extractData(res: Response): JsendResponse {
@@ -7,12 +8,26 @@ export class BaseService {
   }
   
   protected handleError (error: any) {
-    // In a real world app, we might use a remote logging infrastructure
-    // We'd also dig deeper into the error to get a better message
-    let errMsg = (error.message) ? error.message :
-      error.status ? `${error.status} - ${error.statusText}` : 'Server error';
-    console.error(errMsg); // log to console instead
-    return Observable.throw(errMsg);
+    let response: JsendResponse
+    try {
+      response = error.json();
+    } catch ( jsonError ) {
+      response = {
+        status: 'error',
+        message: "Something went horribly wrong.",
+        data: null
+      };
+    }
+    return( Observable.throw( response ) );
+  }
+
+  protected BuildJsonRequest(data: Object) {
+    let request = new JsonRequest();
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    request.body = JSON.stringify(data)
+    request.options = new RequestOptions({ headers: headers });
+
+    return request;
   }
 }
 
@@ -20,4 +35,9 @@ export class JsendResponse {
   status: string;
   data: any;
   message: string;
+}
+
+export class JsonRequest {
+  body: string;
+  options: RequestOptions;
 }
