@@ -3,7 +3,7 @@ import { UserService } from './user_service';
 import { UserData } from './user_data';
 import { User } from './user_model';
 import { AuthService } from '../auth/auth_service';
-var jsend = require('jsend');
+let jsend = require('jsend');
 
 export class UserController{
   private _userService: UserService;
@@ -77,7 +77,6 @@ export class UserController{
     user.password = req.body.password;
     
     this._userService.createUser(user).then(authToken => {
-      console.log(authToken)
       let token = this._authService.signToken(authToken);
       res.jsend.success({ token })
     })
@@ -87,8 +86,8 @@ export class UserController{
   /* GET exists */
   public exists = (req: Request, res: Response, next: NextFunction) => {
     let params = req.query;
-    this._userService.userExists(params).then(exists => {
-      res.jsend.success(exists);
+    this._userService.userExists(params).then(userExists => {
+      res.jsend.success(userExists);
     })
     .catch(next)
   }

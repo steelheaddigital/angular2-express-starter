@@ -27,7 +27,11 @@ export class UserService{
       return user;
     });
   }
-  
+    
+  public userExists(params: Object): Promise<boolean> {
+    return this._db.userExists(params);
+  }
+
   public createUser(user: User): Promise<Token>{    
     let salt = this.makeSalt();
     let encryptedPassword = this.encryptPassword(user.password, salt);
@@ -38,7 +42,7 @@ export class UserService{
     
     return this._db.createUser(user).then(id => {
       return {
-        id: id[0],
+        id: id,
         role: user.role
       };
     }); 
@@ -62,7 +66,7 @@ export class UserService{
       }
     })
   }
-  
+
   public authenticateUserByEmail(email: string, password: string): Promise<AuthResult>{
     return this.getUserByEmail(email).then(user => {
       return this.authenticateUser(user, password);
@@ -93,10 +97,6 @@ export class UserService{
       }
       
       return result;
-  }
-  
-  public userExists(params: Object): Promise<boolean> {
-    return this._db.userExists(params);
   }
 
   private makeSalt(byteSize: number = 16): string{    

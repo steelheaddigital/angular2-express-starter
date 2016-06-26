@@ -38,7 +38,7 @@ export class UserData{
         'salt': user.salt,
         'provider': user.provider
       })
-      .returning('id');
+      .returning('id')[0];
   }
 
   public destroyUser(id: number): Promise<void>{
