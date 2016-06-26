@@ -24,7 +24,7 @@ export class UserController{
   /* DELETE specifiec user */
   public destroy = (req: Request, res: Response, next: NextFunction) => {
     this._userService.destroyUser(req.params.id).then(() => {
-      res.status(204).end();
+      res.jsend.success(true);
     })
     .catch(next);
   };
@@ -33,7 +33,7 @@ export class UserController{
   public me = (req: Request, res: Response, next: NextFunction) => {
     this._userService.getUser(req.user.id).then(user => {
       if(!user){
-        return res.status(401).end();
+        return res.status(401).jsend.fail('Unauthorized');
       }
       res.jsend.success(user);
     })
@@ -48,9 +48,9 @@ export class UserController{
     
     this._userService.updatePassword(req.user.id, oldPass, newPass).then(authResult => {
       if(authResult.authenticated === true){
-        res.status(204).end();
+        res.jsend.success(true);
       } else {
-        res.status(403).end();
+        res.status(403).jsend.fail('Forbidden');
       }
     })
     .catch(next);

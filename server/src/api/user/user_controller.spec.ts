@@ -57,11 +57,12 @@ describe('User Controller', function() {
       
       let next: NextFunction;
       let req: any = { params: { id: 1} };
-      let res: any = { status: function(status) {
-          expect(status).to.equal(204);
+      let res: any = { jsend: {
+        success: function(data) {
+          expect(data).to.equal(true);
           done();
         }
-      };
+      }};
 
       let userController = new UserController(userService, authService);
 
@@ -116,10 +117,14 @@ describe('User Controller', function() {
       let next: NextFunction;
       let req: any = { user: { id: 1 } };
       let res: any = { status: function(status) {
-          expect(status).to.equal(401);
-          done();
-        }
-      };
+        expect(status).to.equal(401);
+        return { jsend: {
+          fail: function(message) {
+            expect(message).to.equal('Unauthorized');
+            done();
+          }
+        }}
+      }};
 
       let userController = new UserController(userService, authService);
 
@@ -154,11 +159,13 @@ describe('User Controller', function() {
             newPassword: 'newPassword'
         } 
       };
-      let res: any = { status: function(status) {
-          expect(status).to.equal(204);
+      let res: any = { jsend: {
+        success: function(data) {
+          expect(data).to.equal(true);
           done();
         }
-      };
+      }};
+
 
       let userController = new UserController(userService, authService);
 
@@ -192,10 +199,14 @@ describe('User Controller', function() {
         } 
       };
       let res: any = { status: function(status) {
-          expect(status).to.equal(403);
-          done();
-        }
-      };
+        expect(status).to.equal(403);
+        return { jsend: {
+          fail: function(message) {
+            expect(message).to.equal('Forbidden');
+            done();
+          }
+        }}
+      }};
 
       let userController = new UserController(userService, authService);
 
