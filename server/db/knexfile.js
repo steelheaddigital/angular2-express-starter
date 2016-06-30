@@ -13,6 +13,20 @@ module.exports = {
             tableName: 'migrations'
         }
     },
+    test: {
+        client: 'pg',
+        debug: true,
+        connection: {
+            host     : 'testdb',
+            user     : 'test',
+            password : 'test',
+            database : 'test',
+            charset  : 'utf8'
+        },
+        migrations: {
+            tableName: 'migrations'
+        }
+    },
     production: {
         client: 'pg',
         debug: false,

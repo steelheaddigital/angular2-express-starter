@@ -1,12 +1,30 @@
 version: '2'
 services:
   app:
-    build: .
-    entrypoint: ["./dev-entrypoint.sh"]
+    command: ["gulp"] 
     ports:
      - "3000:3000"
      - "5858:5858"
     environment:
       NODE_ENV: development
-      JSPM_GITHUB_AUTH_TOKEN: $JSPM_GITHUB_AUTH_TOKEN
+  testdb:
+    image: postgres:9.5
+    restart: always
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: "test"
+      POSTGRES_PASSWORD: "test"
+    volumes:
+      - /opt/app/test_data:/var/lib/postgresql/data
+  test:
+    image: app:latest
+    volumes:
+     - ./:/opt/app
+     - /opt/app/node_modules
+     - /opt/app/client/jspm_packages
+    environment:
+      NODE_ENV: test
+    links:
+     - testdb
 

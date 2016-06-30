@@ -1,4 +1,5 @@
 FROM ubuntu:latest
+ARG JSPM_GITHUB_AUTH_TOKEN
 
 # Install Utilities
 RUN apt-get update -q
@@ -20,10 +21,14 @@ RUN npm install -g npm
 RUN npm install --quiet -g knex gulp-cli karma-cli mocha jspm typings
 
 RUN mkdir /opt/app
-WORKDIR /opt/app
+WORKDIR /opt/app 
 
 # Share local directory on the docker container
 ADD . /opt/app
+
+RUN npm install
+RUN cd client && jspm install
+RUN cd server && typings install
 
 # Machine cleanup
 RUN npm cache clean

@@ -7,17 +7,17 @@ let config = require('../../../config');
 let compose = require('composable-middleware');
 
 let validateJwt = expressJwt({
-  secret: process.env.SESSION
+  secret: config.sessionSecret
 });
 
 export class AuthService {
   private _userService: UserService
-  constructor(userService: UserService){
+  constructor(private userService: UserService){
     this._userService = userService
   }
   
   public signToken(token: Token) {
-    return jwt.sign(token, process.env.SESSION, {
+    return jwt.sign(token, config.sessionSecret, {
       expiresIn: "45 minutes"
     });
   }

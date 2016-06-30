@@ -2,7 +2,7 @@ version: '2'
 services:
   app:
     build: .
-    entrypoint: ['./prod-entrypoint.sh']
+    command: ["npm","start"]
     ports:
      - "3000:3000"
     environment:

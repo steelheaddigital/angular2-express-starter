@@ -1,6 +1,10 @@
 version: '2'
 services:
   app:
+    build:
+      context: ./
+      args:
+        JSPM_GITHUB_AUTH_TOKEN: $JSPM_GITHUB_AUTH_TOKEN
     image: 'app:latest'
     restart: always
     volumes:
