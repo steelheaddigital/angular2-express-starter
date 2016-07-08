@@ -55,12 +55,12 @@ export class AuthService {
 
     return compose()
       .use(this.isAuthenticated())
-      .use(function meetsRequirements(req, res, next) {
+      .use(function(req, res, next) {
         if (config.userRoles.indexOf(req.user.role) >=
             config.userRoles.indexOf(roleRequired)) {
           next();
         } else {
-          res.status(403).send('Forbidden');
+          res.status(403).end();
         }
       });
   }

@@ -32,7 +32,6 @@ describe('Auth Service', function() {
       let userService = new UserService(new UserData());
 
       sinon.stub(userService, "getUser", function(userId) {
-        console.log(userId);
         var promise = new Promise(function(resolve, reject){
           if(userId != null && userId !== undefined && userId === 1)
             resolve({id: 1, name: 'Test1'})
@@ -49,9 +48,6 @@ describe('Auth Service', function() {
       }
       let signedToken = jwt.sign(token, config.sessionSecret);
 
-      let next: NextFunction = function() {
-        done();
-      };
       let req: any = {
         headers: {
           authorization: 'Bearer ' + signedToken
@@ -74,7 +70,6 @@ describe('Auth Service', function() {
       let userService = new UserService(new UserData());
 
       sinon.stub(userService, "getUser", function(userId) {
-        console.log(userId);
         var promise = new Promise(function(resolve, reject){
           if(userId != null && userId !== undefined && userId === 1)
             resolve({id: 1, name: 'Test1'})
@@ -92,9 +87,6 @@ describe('Auth Service', function() {
       //Sign the token with a different secret to make it invalid
       let signedToken = jwt.sign(token, "12345");
 
-      let next: NextFunction = function() {
-        done();
-      };
       let req: any = {
         headers: {
           authorization: 'Bearer ' + signedToken
@@ -112,6 +104,83 @@ describe('Auth Service', function() {
         expect(req.user).to.be.empty
         done();
       });
+    });
+  });
+
+  describe('hasRole method', function() {
+    it('completes execution if user is authenticated and has the required role', function(done) {
+      let userService = new UserService(new UserData());
+
+      sinon.stub(userService, "getUser", function(userId) {
+        var promise = new Promise(function(resolve, reject){
+          if(userId != null && userId !== undefined && userId === 1)
+            resolve({id: 1, name: 'Test1', role: 'admin'})
+          else
+            resolve(null);
+        })
+
+        return promise
+      });
+      
+      let token: Token = {
+        id: 1,
+        role: 'user'
+      }
+      let signedToken = jwt.sign(token, config.sessionSecret);
+
+      let req: any = {
+        headers: {
+          authorization: 'Bearer ' + signedToken
+        }
+      };
+      let res: any = { };
+      let authService = new AuthService(userService);
+
+      let middleware = authService.hasRole('admin');
+
+      middleware(req, res, error => {
+        if (error) { throw new Error(error); }
+        done();
+      })
+    });
+
+    it('sets response status to 403 if user does not have the required role', function(done) {
+      let userService = new UserService(new UserData());
+
+      sinon.stub(userService, "getUser", function(userId) {
+        var promise = new Promise(function(resolve, reject){
+          if(userId != null && userId !== undefined && userId === 1)
+            resolve({id: 1, name: 'Test1', role: 'user'})
+          else
+            resolve(null);
+        })
+
+        return promise
+      });
+      
+      let token: Token = {
+        id: 1,
+        role: 'user'
+      }
+      let signedToken = jwt.sign(token, config.sessionSecret);
+
+      let req: any = {
+        headers: {
+          authorization: 'Bearer ' + signedToken
+        }
+      };
+      let res: any = { status: function(status) {
+        expect(status).to.equal(403)
+        done();
+      }};
+      let authService = new AuthService(userService);
+
+      let middleware = authService.hasRole('admin');
+
+      middleware(req, res, error => {
+        if (error) { throw new Error(error); }
+        done();
+      })
     });
   });
 
