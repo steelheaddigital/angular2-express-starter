@@ -18,6 +18,8 @@ services:
     volumes:
       - /opt/app/test_data:/var/lib/postgresql/data
   test:
+    depends_on:
+     - app
     image: app:latest
     volumes:
      - ./:/opt/app

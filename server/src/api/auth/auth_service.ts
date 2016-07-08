@@ -12,7 +12,7 @@ let validateJwt = expressJwt({
 
 export class AuthService {
   private _userService: UserService
-  constructor(private userService: UserService){
+  constructor(userService: UserService){
     this._userService = userService
   }
   

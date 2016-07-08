@@ -4,21 +4,23 @@ $script = <<SCRIPT
 
 export DEBIAN_FRONTEND=noninteractive
 
-# Install kernel extras to enable docker aufs support
-sudo apt-get -y install linux-image-extra-$(uname -r)
-
 #install docker
-apt-key adv --keyserver hkp://pgp.mit.edu:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
-echo 'deb https://apt.dockerproject.org/repo ubuntu-precise main' | sudo tee /etc/apt/sources.list.d/docker.list
-sudo apt-get update
-sudo apt-get purge lxc-docker*
-sudo apt-get install -y --force-yes docker-engine
- 
+apt-get update
+apt-get install apt-transport-https ca-certificates
+apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
+echo 'deb https://apt.dockerproject.org/repo ubuntu-trusty main' | tee /etc/apt/sources.list.d/docker.list
+apt-get update
+apt-get purge lxc-docker
+apt-get install -y --force-yes docker-engine
+
+# Install kernel extras to enable docker aufs support
+apt-get -y install linux-image-extra-$(uname -r)
+
 #add the vagrant user to the docker group
-sudo usermod -aG docker vagrant
+usermod -aG docker vagrant
  
 #install docker-compose
-curl -L https://github.com/docker/compose/releases/download/1.7.0/docker-compose-Linux-x86_64 > /usr/local/bin/docker-compose
+curl -L https://github.com/docker/compose/releases/download/1.7.1/docker-compose-Linux-x86_64 > /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
 
 SCRIPT
