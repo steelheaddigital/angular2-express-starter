@@ -203,6 +203,6 @@ gulp.task( 'server:restart', ['clean:server'], function() {
   return stream
 });
 
-gulp.task( 'default', [ 'server:start' ], function() {
+gulp.task( 'default', ['server:start' ], function() {
     gulp.watch( './server/src/**/*.ts', [ 'server:restart' ] );
 });
