@@ -82,10 +82,18 @@ gulp.task('test:server', ['compile:server'], function () {
 });
 
 gulp.task('test:ui', function (done) {
-  new KarmaServer({
-    configFile: __dirname + '/karma.conf.js',
-    singleRun: true
-  }, done).start();
+  let spawn = require('child_process').spawn;
+  let child = spawn('xvfb-run', ['karma', 'start']);
+
+  child.stdout.on('data', function(data) {
+      console.log('stdout: ' + data);
+  });
+  child.stderr.on('data', function(data) {
+      console.log('stderr: ' + data);
+  });
+  child.on('close', function(code) {
+      console.log('closing code: ' + code);
+  });
 });
 
 gulp.task('clean:client', function(done){

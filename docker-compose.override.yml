@@ -20,7 +20,9 @@ services:
   test:
     depends_on:
      - app
-    image: app:latest
+    build:
+      context: .
+      dockerfile: docker/test/Dockerfile
     volumes:
      - ./:/opt/app
      - /opt/app/node_modules

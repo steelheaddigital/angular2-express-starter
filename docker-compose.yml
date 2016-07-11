@@ -3,6 +3,7 @@ services:
   app:
     build:
       context: ./
+      dockerfile: docker/app/Dockerfile
       args:
         JSPM_GITHUB_AUTH_TOKEN: $JSPM_GITHUB_AUTH_TOKEN
     image: 'app:latest'
@@ -26,7 +27,7 @@ services:
   web:
     build:
       context: .
-      dockerfile: nginx/Dockerfile
+      dockerfile: docker/nginx/Dockerfile
     restart: always
     volumes:
      - ./client/dist:/usr/share/html

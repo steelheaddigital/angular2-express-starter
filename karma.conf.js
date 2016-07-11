@@ -7,15 +7,16 @@ module.exports = function(config){
 
     frameworks: ['jspm', 'mocha'],
 
-    browsers : ['PhantomJS'],
+    browsers : ['Chrome'],
 
     plugins : [
-      'karma-phantomjs-launcher',
+      'karma-chrome-launcher',
       'karma-mocha',
       'karma-jspm'
     ],
     
     jspm: {
+      config: 'jspm.config.js',
       loadFiles: [ 'app/**/*.spec.ts' ],
       serveFiles: [ 'app/**/*!(*.spec).ts']
     },
