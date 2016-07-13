@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { BaseService, JsendResponse } from '../shared/base.service';
-import { AuthHttp, AuthConfig, JwtHelper } from 'angular2-jwt';
+import { JwtHelper } from 'angular2-jwt';
 import { LOGIN_PATH } from '../shared/api';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';

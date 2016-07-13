@@ -78,8 +78,8 @@ describe('User Service', function() {
       let userData = new UserData();
 
       let stub = sinon.stub(userData, "createUser", function() {
-        var promise = new Promise<number>(function(resolve, reject){
-          resolve(1);
+        var promise = new Promise<number[]>(function(resolve, reject){
+          resolve([1]);
         })
 
         return promise

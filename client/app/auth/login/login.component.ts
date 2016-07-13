@@ -1,4 +1,4 @@
-import { FORM_DIRECTIVES, FormBuilder, Control, ControlGroup, Validators } from '@angular/common';
+import { FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
@@ -8,13 +8,13 @@ import { BaseFormComponent } from '../../shared/base-form.component';
   selector: 'login',
   templateUrl: 'login.component.html',
   providers: [AuthService],
-  directives: [FORM_DIRECTIVES]
+  directives: [FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES]
 })
 export class LoginComponent extends BaseFormComponent {
 
-  loginForm: ControlGroup;
-  email: Control;
-  password: Control;
+  loginForm: FormGroup;
+  email: FormControl;
+  password: FormControl;
 
   constructor (private authService: AuthService, private router: Router, private builder: FormBuilder) 
   { 
@@ -36,8 +36,8 @@ export class LoginComponent extends BaseFormComponent {
   }
 
   private buildForm(): void {
-    this.email = new Control('', Validators.required);
-    this.password = new Control('', Validators.required);
+    this.email = new FormControl('', Validators.required);
+    this.password = new FormControl('', Validators.required);
     this.loginForm = this.builder.group({
       email: this.email,
       password: this.password

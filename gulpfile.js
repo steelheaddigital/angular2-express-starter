@@ -159,12 +159,15 @@ gulp.task('compile:client:sass', function () {
     .pipe(gulp.dest('./client/dist'));
 });
 
-gulp.task('compile:client', ['clean:client', 
-  'compile:client:sass', 
+gulp.task('compile:client:all', [ 'compile:client:sass', 
   'compile:client:app', 
   'compile:client:copy', 
   'compile:client:html']
 )
+
+gulp.task('compile:client', ['clean:client'], function() {
+  gulp.start('compile:client:all')
+})
 
 gulp.task('clean:server', function(){
   return del(['./server/build/**/*'])

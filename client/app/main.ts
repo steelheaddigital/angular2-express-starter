@@ -3,14 +3,28 @@ import 'reflect-metadata';
 import { APP_BASE_HREF } from '@angular/common';
 import { enableProdMode, provide } from '@angular/core';
 import { bootstrap } from '@angular/platform-browser-dynamic';
-import { ROUTER_PROVIDERS } from '@angular/router';
-import { HTTP_PROVIDERS } from '@angular/http';
-import { AUTH_PROVIDERS } from 'angular2-jwt';
+import { disableDeprecatedForms, provideForms } from '@angular/forms';
+import { HTTP_PROVIDERS, Http } from '@angular/http';
+import { AuthHttp, AuthConfig } from 'angular2-jwt';
+import { APP_ROUTER_PROVIDERS } from './app.routes';
 import { AppComponent } from './app.component';
 
 bootstrap(AppComponent, [
-  ROUTER_PROVIDERS,
+  APP_ROUTER_PROVIDERS,
   HTTP_PROVIDERS,
-  AUTH_PROVIDERS,
-  provide(APP_BASE_HREF, { useValue: '/' })
+  provide(AuthHttp, {
+    useFactory: (http) => {
+      return new AuthHttp(new AuthConfig({
+        headerName: 'Authorization',
+        headerPrefix: 'Bearer',
+        tokenName: 'auth_token',
+        tokenGetter: (() => localStorage.getItem(this.tokenName)),
+        noJwtError: false,
+        noTokenScheme: false
+      }), http);
+    },
+    deps: [Http]
+  }),
+  disableDeprecatedForms(),
+  provideForms()
 ]);

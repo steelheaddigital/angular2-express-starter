@@ -39,10 +39,10 @@ export class UserService{
     user.password = encryptedPassword;
     user.provider = 'local';
     user.role = 'user';
-    
+
     return this._db.createUser(user).then(id => {
       return {
-        id: id,
+        id: id[0],
         role: user.role
       };
     }); 

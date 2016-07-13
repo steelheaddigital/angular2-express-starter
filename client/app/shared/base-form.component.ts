@@ -1,10 +1,10 @@
-import { ControlGroup } from '@angular/common';
+import { FormGroup } from '@angular/forms';
 
 export class BaseFormComponent {
   protected errorMessage: string
   protected serverValidations: Object;
 
-  protected handleError(form: ControlGroup, error: any) {
+  protected handleError(form: FormGroup, error: any) {
     if(error.status === 'fail'){
       for (let propertyName of Object.keys(error.data)) {
         let formProperty = form.find(propertyName);

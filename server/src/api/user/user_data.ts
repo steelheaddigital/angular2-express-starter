@@ -28,7 +28,7 @@ export class UserData{
     });
   }
 
-  public createUser(user: User): Promise<number>{
+  public createUser(user: User): Promise<number[]>{
     return db('users')
       .insert({
         'name': user.name,
@@ -38,7 +38,6 @@ export class UserData{
         'salt': user.salt,
         'provider': user.provider
       })
-      .returning('id')[0];
   }
 
   public destroyUser(id: number): Promise<void>{

@@ -1,6 +1,11 @@
-import { beforeEachProviders } from '@angular/core/testing'
-import 'mocha'
-import { expect } from 'chai'
+import {  
+    expect, 
+    it, 
+    describe,
+    injectAsync,
+    TestComponentBuilder,
+    beforeEachProvider
+} from '@angular/core/testing';
 
 describe('SignupComponent', () => {
   
