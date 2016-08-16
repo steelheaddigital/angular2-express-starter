@@ -1,34 +1,12 @@
 version: '2'
 services:
-  app:
+  server:
     command: ["gulp"] 
     ports:
      - "3000:3000"
      - "5858:5858"
+     - "49152:49152"
+     - "4200:4200"
     environment:
       NODE_ENV: development
-  testdb:
-    image: postgres:9.5
-    restart: always
-    ports:
-      - "5433:5432"
-    environment:
-      POSTGRES_USER: "test"
-      POSTGRES_PASSWORD: "test"
-    volumes:
-      - /opt/app/test_data:/var/lib/postgresql/data
-  test:
-    depends_on:
-     - app
-    build:
-      context: .
-      dockerfile: docker/test/Dockerfile
-    volumes:
-     - ./:/opt/app
-     - /opt/app/node_modules
-     - /opt/app/client/jspm_packages
-    environment:
-      NODE_ENV: test
-    links:
-     - testdb
 

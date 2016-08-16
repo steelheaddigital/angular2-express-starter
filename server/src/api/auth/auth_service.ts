@@ -18,7 +18,7 @@ export class AuthService {
   
   public signToken(token: Token) {
     return jwt.sign(token, config.sessionSecret, {
-      expiresIn: "45 minutes"
+      expiresIn: "45m"
     });
   }
   

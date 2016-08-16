@@ -1,0 +1,45 @@
+{
+  "name": "server",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www",
+    "postinstall": "typings install"
+  },
+  "dependencies": {
+    "body-parser": "^1.15.1",
+    "class-validator": "^0.3.2",
+    "composable-middleware": "^0.3.0",
+    "cookie-parser": "^1.4.2",
+    "cors": "^2.7.1",
+    "debug": "~2.2.0",
+    "express": "~4.13.1",
+    "express-jwt": "^3.4.0",
+    "jsend": "^1.0.2",
+    "jsonwebtoken": "^6.2.0",
+    "knex": "^0.10.0",
+    "lodash": "^4.12.0",
+    "morgan": "^1.7.0",
+    "passport": "^0.3.2",
+    "passport-facebook": "^2.1.1",
+    "passport-local": "^1.0.0",
+    "pg": "^4.5.5",
+    "serve-favicon": "~2.3.0"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "del": "^2.2.0",
+    "gulp": "^3.9.1",
+    "gulp-develop-server": "^0.5.1",
+    "gulp-mocha": "^2.2.0",
+    "gulp-plumber": "^1.1.0",
+    "gulp-require-tasks": "^1.0.5",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-typescript": "^2.13.4",
+    "minimist": "^1.2.0",
+    "mocha": "^2.4.5",
+    "sinon": "^1.17.4",
+    "typescript": "^1.8.10",
+    "typings": "^1.0.4"
+  }
+}

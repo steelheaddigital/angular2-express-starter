@@ -1,15 +1,15 @@
-.git
-.vagrant
-.vscode
 .env
 .gitignore
 Dockerfile
 Vagrantfile
 docker-compose.yml
-docker-entrypoint.sh
-node_modules
-client/jspm_packages
-client/dist
-server/typings
-server/build
+.git/
+.vagrant/
+.vscode/
+client/typings/
+client/node_modules/
+client/dist/
+server/node_modules/
+server/typings/
+server/build/
 

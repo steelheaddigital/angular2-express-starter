@@ -1,22 +1,24 @@
 Express/Angular2 Starter
 ========================
-This is a starter template for an Angular2 application with an express JSON API backend.  It uses JSPM for client side dependencey management.
+This is a starter template for an Angular2 application with an express JSON API backend. Includes basic authentication.
 
 Install Dev Environment
 =======================
 1. Clone this repo
 2. Install Vagrant and Virtualbox
-3. In the directory where you cloned this repo, run
+3. In the directory where you cloned this repo, run the following to start the server
 
 `vagrant up`
 
-4. SSH into the new VM with
+4. On your local machine make sure you have node and npm installed.
 
-`vagrant ssh`
+5. Install angular-cli
 
-5. Start the app
+`npm install angular-cli`
 
-`cd /vagrant && docker-compose up -d`
+5. Start the client.
+
+`ng serve`
 
 A few other useful commands
 ---------------------------

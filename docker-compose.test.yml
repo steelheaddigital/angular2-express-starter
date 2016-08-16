@@ -1,0 +1,33 @@
+version: '2'
+services:
+  testdb:
+    env_file: .env
+    image: postgres:9.5
+    restart: always
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: "test"
+      POSTGRES_PASSWORD: "test"
+    volumes:
+      - test_data:/var/lib/postgresql/data
+  test:
+    depends_on:
+     - server
+    build:
+      context: .
+      dockerfile: docker/test/Dockerfile
+    volumes:
+     - ./:/opt/app
+     - /opt/app/client/node_modules
+     - /opt/app/server/node_modules
+    environment:
+      NODE_ENV: test
+      POSTGRES_USER: "test"
+      POSTGRES_PASSWORD: "test"
+    links:
+     - testdb
+
+volumes:
+  test_data:
+

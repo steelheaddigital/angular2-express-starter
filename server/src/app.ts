@@ -2,7 +2,6 @@
 // Set default node environment to development
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
-import * as dotenv from 'dotenv';
 import * as express from 'express';
 import path = require('path');
 const jsend = require('jsend');
@@ -10,19 +9,22 @@ const favicon = require('serve-favicon');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-
-dotenv.config();
+const cors = require('cors')
 
 let app = express();
 
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+var corsOptions = {
+  origin: 'http://localhost:4200'
+};
+app.use(cors(corsOptions))
+
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../../client')));
 app.use(jsend.middleware);
+app.use(cors(corsOptions))
 
 // configure routes
 app.use('/api/user', require('./api/user'));
@@ -60,3 +62,4 @@ app.use(function(err: any, req: express.Request, res: express.Response, next: ex
 
 
 module.exports = app;
+
