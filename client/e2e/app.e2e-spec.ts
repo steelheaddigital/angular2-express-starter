@@ -7,8 +7,8 @@ describe('client App', function() {
     page = new ClientPage();
   });
 
-  it('should display message saying app works', () => {
+  it('should display Home Page', () => {
     page.navigateTo();
-    expect(page.getParagraphText()).toEqual('app works!');
+    expect(page.getParagraphText()).toEqual('Home Page');
   });
 });

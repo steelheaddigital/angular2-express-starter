@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
-import { BaseService, JsendResponse } from '../shared/base.service';
+import { BaseService, IJsendResponse } from '../shared/base.service';
 import { JwtHelper } from 'angular2-jwt';
 import { LOGIN_PATH } from '../shared/api';
 import 'rxjs/add/operator/map';
@@ -17,7 +17,7 @@ export class AuthService extends BaseService {
     this.jwtHelper = new JwtHelper();
   }
   
-  public login(email: string, password: string): Observable<JsendResponse>{
+  public login(email: string, password: string): Observable<IJsendResponse>{
     let body = JSON.stringify({ email, password })
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });

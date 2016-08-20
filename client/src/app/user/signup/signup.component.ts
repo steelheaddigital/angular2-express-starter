@@ -56,7 +56,7 @@ export class SignupComponent extends BaseFormComponent {
     return this.checkUser(control, 'name')
   }
 
-   private checkEmail(control: FormControl): Observable<any> {
+  private checkEmail(control: FormControl): Observable<any> {
     return this.checkUser(control, 'email')
   }
 

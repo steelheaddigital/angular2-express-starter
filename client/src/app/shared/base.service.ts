@@ -3,12 +3,12 @@ import { Response, Headers, RequestOptions } from '@angular/http';
 import 'rxjs/add/observable/throw';
 
 export class BaseService {
-  protected extractData(res: Response): JsendResponse {
+  protected extractData(res: Response): IJsendResponse {
     return res.json();
   }
   
   protected handleError (error: any) {
-    let response: JsendResponse
+    let response: IJsendResponse
     try {
       response = error.json();
     } catch ( jsonError ) {
@@ -31,7 +31,7 @@ export class BaseService {
   }
 }
 
-export class JsendResponse {
+export interface IJsendResponse {
   status: string;
   data: any;
   message: string;

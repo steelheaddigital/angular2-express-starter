@@ -3,7 +3,7 @@ import { enableProdMode, provide } from '@angular/core';
 import { bootstrap } from '@angular/platform-browser-dynamic';
 import { disableDeprecatedForms, provideForms } from '@angular/forms';
 import { HTTP_PROVIDERS, Http } from '@angular/http';
-import { AuthHttp, AuthConfig } from 'angular2-jwt';
+import { AuthHttp, AuthConfig, AUTH_PROVIDERS } from 'angular2-jwt';
 import { AppComponent, environment, APP_ROUTER_PROVIDERS} from './app';
 
 if (environment.production) {
@@ -13,6 +13,7 @@ if (environment.production) {
 bootstrap(AppComponent, [
   APP_ROUTER_PROVIDERS,
   HTTP_PROVIDERS,
+  AUTH_PROVIDERS,
   provide(AuthHttp, {
     useFactory: (http) => {
       return new AuthHttp(new AuthConfig({

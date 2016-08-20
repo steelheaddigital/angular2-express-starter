@@ -11,7 +11,8 @@
 const map: any = {
   'moment': 'vendor/moment/moment.js',
   'angular2-jwt': 'vendor/angular2-jwt/angular2-jwt.js',
-  'ng2-bootstrap': 'vendor/ng2-bootstrap'
+  'ng2-bootstrap': 'vendor/ng2-bootstrap',
+  'crypto-js': 'vendor/crypto-js/crypto-js.js'
 };
 
 /** User packages configuration. */
@@ -26,7 +27,10 @@ const packages: any = {
     format: 'cjs',
     defaultExtension: 'js',
     main: 'ng2-bootstrap.js'
-  }
+  },
+  'crypto-js':{
+    format: 'cjs'
+  },
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////

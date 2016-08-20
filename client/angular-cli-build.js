@@ -19,7 +19,8 @@ module.exports = function(defaults) {
       'moment/moment.js',
       'angular2-jwt/**/*.+(ts|js|js.map)',
       'ng2-bootstrap/**/*.js',
-      'boostrap-sass/assets/**/*'
+      'boostrap-sass/assets/**/*',
+      'crypto-js/crypto-js.js'
     ]
   });
 };
