@@ -20,7 +20,9 @@ module.exports = function(defaults) {
       'angular2-jwt/**/*.+(ts|js|js.map)',
       'ng2-bootstrap/**/*.js',
       'boostrap-sass/assets/**/*',
-      'crypto-js/crypto-js.js'
+      'crypto-js/crypto-js.js',
+      'underscore/underscore.js',
+      'typemoq/typemoq.js'
     ]
   });
 };

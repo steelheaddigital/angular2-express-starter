@@ -1,6 +1,7 @@
 /* tslint:disable:no-unused-variable */
 
-import { beforeEachProviders,
+import { beforeEach,
+    addProviders,
     describe,
     expect,
     inject,
@@ -16,7 +17,7 @@ import { BaseRequestOptions, Http, Response, ResponseOptions } from '@angular/ht
 import { provide } from '@angular/core';
 
 describe('Service: User', () => {
-  beforeEachProviders(() => [
+  beforeEach(() => addProviders([
       BaseRequestOptions,
       MockBackend,
       {
@@ -27,7 +28,7 @@ describe('Service: User', () => {
           deps: [MockBackend, BaseRequestOptions]
       },
       UserService
-  ]);
+  ]));
 
   afterEach(() => {
     localStorage.removeItem('auth_token');
@@ -39,7 +40,7 @@ describe('Service: User', () => {
     })
   );
 
-  describe('create method', () => {
+  describe('createUser method', () => {
 
     it('should create user and log them in',
       inject([UserService, MockBackend], fakeAsync((userService:UserService, mockBackend:MockBackend) => {

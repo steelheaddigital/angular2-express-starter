@@ -1,7 +1,8 @@
 /* tslint:disable:no-unused-variable */
 /// <reference path="../../../typings/globals/crypto-js/index.d.ts" />
 
-import { beforeEachProviders,
+import { beforeEach,
+    addProviders,
     describe,
     expect,
     inject,
@@ -19,7 +20,7 @@ import * as crypto from 'crypto-js';
 import * as moment from 'moment';
 
 describe('Service: Auth', () => {
-  beforeEachProviders(() => [
+  beforeEach(() => addProviders([
       BaseRequestOptions,
       MockBackend,
       {
@@ -30,7 +31,7 @@ describe('Service: Auth', () => {
           deps: [MockBackend, BaseRequestOptions]
       },
       AuthService
-  ]);
+  ]));
 
   afterEach(() => {
     localStorage.removeItem('auth_token');

@@ -12,7 +12,9 @@ const map: any = {
   'moment': 'vendor/moment/moment.js',
   'angular2-jwt': 'vendor/angular2-jwt/angular2-jwt.js',
   'ng2-bootstrap': 'vendor/ng2-bootstrap',
-  'crypto-js': 'vendor/crypto-js/crypto-js.js'
+  'crypto-js': 'vendor/crypto-js/crypto-js.js',
+  'typemoq': 'vendor/typemoq/typemoq.js',
+  'underscore': 'vendor/underscore/underscore.js'
 };
 
 /** User packages configuration. */
@@ -31,6 +33,12 @@ const packages: any = {
   'crypto-js':{
     format: 'cjs'
   },
+  'typemoq':{
+    format: 'cjs'
+  },
+  'underscore':{
+    format: 'cjs'
+  }
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
