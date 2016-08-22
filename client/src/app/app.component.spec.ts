@@ -1,6 +1,6 @@
 /* tslint:disable:no-unused-variable */
 
-import { describe, beforeEach, it, expect, addProviders, async, inject } from '@angular/core/testing';
+import { addProviders, async, inject } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 
 describe('App: Client', () => {

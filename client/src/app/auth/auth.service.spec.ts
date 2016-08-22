@@ -1,15 +1,10 @@
 /* tslint:disable:no-unused-variable */
 /// <reference path="../../../typings/globals/crypto-js/index.d.ts" />
 
-import { beforeEach,
-    addProviders,
-    describe,
-    expect,
+import { addProviders,
     inject,
     fakeAsync,
     tick,
-    it, 
-    afterEach
 } from '@angular/core/testing';
 import { AuthService } from './auth.service';
 import { IJsendResponse } from '../shared/base.service';

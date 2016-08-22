@@ -12,7 +12,7 @@ import 'rxjs/add/operator/take';
   selector: 'app-signup',
   templateUrl: 'signup.component.html',
   styleUrls: ['signup.component.css'],
-  providers: [UserService],
+  providers: [UserService, FormBuilder],
   directives: [FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES]
 })
 export class SignupComponent extends BaseFormComponent {

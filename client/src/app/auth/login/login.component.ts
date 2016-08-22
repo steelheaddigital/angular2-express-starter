@@ -8,7 +8,7 @@ import { BaseFormComponent } from '../../shared/base-form.component';
   moduleId: module.id,
   selector: 'app-login',
   templateUrl: 'login.component.html',
-  providers: [AuthService],
+  providers: [AuthService, FormBuilder],
   directives: [FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES]
 })
 export class LoginComponent extends BaseFormComponent {

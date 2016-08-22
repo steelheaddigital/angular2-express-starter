@@ -1,14 +1,9 @@
 /* tslint:disable:no-unused-variable */
 
-import { beforeEach,
-    addProviders,
-    describe,
-    expect,
+import { addProviders,
     inject,
     fakeAsync,
     tick,
-    it, 
-    afterEach, 
     async
 } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';

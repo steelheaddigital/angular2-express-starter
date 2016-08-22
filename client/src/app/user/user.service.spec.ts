@@ -1,14 +1,10 @@
 /* tslint:disable:no-unused-variable */
 
-import { beforeEach,
+import {
     addProviders,
-    describe,
-    expect,
     inject,
     fakeAsync,
-    tick,
-    it, 
-    afterEach
+    tick
 } from '@angular/core/testing';
 import { UserService } from './user.service';
 import { IJsendResponse } from '../shared/base.service';
