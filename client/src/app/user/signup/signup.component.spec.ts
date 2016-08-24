@@ -1,24 +1,27 @@
 /* tslint:disable:no-unused-variable */
+/// <reference path="../../../../typings/globals/jasmine/index.d.ts" />
 
-import { addProviders,
+import { TestBed,
     inject,
     fakeAsync,
     tick,
     async
 } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { DebugElement, provide } from '@angular/core';
+import { provide } from '@angular/core';
 import { SignupComponent } from './signup.component';
 import { UserService } from '../user.service';
-import { REACTIVE_FORM_DIRECTIVES, FORM_DIRECTIVES, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import * as Rx from 'rxjs/Rx';
 import * as TypeMoq from "typemoq";
 
 describe('Component: Signup', () => {
 
-  beforeEach(() => addProviders([
-    FormBuilder
-  ]));
+  beforeEach(() => TestBed.configureTestingModule({
+    providers: [
+      FormBuilder
+    ]
+  }));
 
   it('should inject SignupComponent and build form',
     inject([FormBuilder],(formBuilder: FormBuilder) => {
@@ -82,9 +85,11 @@ describe('Component: Signup', () => {
         expect(component.password.value).toBe("12345");
       })
     )
+  })
 
-    it('should mark name invalid if name exists',
-      inject([FormBuilder], (formBuilder: FormBuilder) => {
+  describe('Validations', () => {
+    it('should not mark name invalid if it does not exist',
+      inject([FormBuilder], fakeAsync((formBuilder: FormBuilder) => {
         let mock: TypeMoq.Mock<UserService> = TypeMoq.Mock.ofType(UserService);
         mock.setup(x => x.exists(TypeMoq.It.isAny()))
           .returns(() => { return new Rx.Observable<boolean>((observer: Rx.Subscriber<boolean>) => {
@@ -94,10 +99,70 @@ describe('Component: Signup', () => {
         let component = new SignupComponent(mock.object, formBuilder);
 
         (<FormControl>component.signupForm.controls['name']).updateValue("test");
+        
+        tick(500);
 
-        expect((<FormControl>component.signupForm.controls['name']).errors).toBe(null);
+        expect(component.name.valid).toBe(true);
+        expect(component.name.errors).toBe(null);
       })
-    )
+    ))
+
+    it('should mark name invalid if it exists',
+      inject([FormBuilder], fakeAsync((formBuilder: FormBuilder) => {
+        let mock: TypeMoq.Mock<UserService> = TypeMoq.Mock.ofType(UserService);
+        mock.setup(x => x.exists(TypeMoq.It.isAny()))
+          .returns(() => { return new Rx.Observable<boolean>((observer: Rx.Subscriber<boolean>) => {
+              observer.next(true);
+            });
+          })
+        let component = new SignupComponent(mock.object, formBuilder);
+
+        (<FormControl>component.signupForm.controls['name']).updateValue("test");
+        
+        tick(500);
+
+        expect(component.name.valid).toBe(false);
+        expect(component.name.errors['nameTaken']).toBe(true);
+      })
+    ))
+
+    it('should not mark email invalid if it does not exist',
+      inject([FormBuilder], fakeAsync((formBuilder: FormBuilder) => {
+        let mock: TypeMoq.Mock<UserService> = TypeMoq.Mock.ofType(UserService);
+        mock.setup(x => x.exists(TypeMoq.It.isAny()))
+          .returns(() => { return new Rx.Observable<boolean>((observer: Rx.Subscriber<boolean>) => {
+              observer.next(false);
+            });
+          })
+        let component = new SignupComponent(mock.object, formBuilder);
+
+        (<FormControl>component.signupForm.controls['email']).updateValue("test@test.com");
+        
+        tick(500);
+
+        expect(component.email.valid).toBe(true);
+        expect(component.email.errors).toBe(null);
+      })
+    ))
+
+    it('should mark email invalid if it exists',
+      inject([FormBuilder], fakeAsync((formBuilder: FormBuilder) => {
+        let mock: TypeMoq.Mock<UserService> = TypeMoq.Mock.ofType(UserService);
+        mock.setup(x => x.exists(TypeMoq.It.isAny()))
+          .returns(() => { return new Rx.Observable<boolean>((observer: Rx.Subscriber<boolean>) => {
+              observer.next(true);
+            });
+          })
+        let component = new SignupComponent(mock.object, formBuilder);
+
+        (<FormControl>component.signupForm.controls['email']).updateValue("test@test.com");
+        
+        tick(500);
+
+        expect(component.email.valid).toBe(false);
+        expect(component.email.errors['nameTaken']).toBe(true);
+      })
+    ))
 
   })
 

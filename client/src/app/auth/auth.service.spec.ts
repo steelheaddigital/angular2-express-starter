@@ -1,7 +1,8 @@
 /* tslint:disable:no-unused-variable */
 /// <reference path="../../../typings/globals/crypto-js/index.d.ts" />
+/// <reference path="../../../typings/globals/jasmine/index.d.ts" />
 
-import { addProviders,
+import { TestBed,
     inject,
     fakeAsync,
     tick,
@@ -15,7 +16,8 @@ import * as crypto from 'crypto-js';
 import * as moment from 'moment';
 
 describe('Service: Auth', () => {
-  beforeEach(() => addProviders([
+  beforeEach(() => TestBed.configureTestingModule({
+    providers: [
       BaseRequestOptions,
       MockBackend,
       {
@@ -26,7 +28,8 @@ describe('Service: Auth', () => {
           deps: [MockBackend, BaseRequestOptions]
       },
       AuthService
-  ]));
+    ]
+  }));
 
   afterEach(() => {
     localStorage.removeItem('auth_token');

@@ -1,7 +1,7 @@
 /* tslint:disable:no-unused-variable */
+/// <reference path="../../../typings/globals/jasmine/index.d.ts" />
 
-import {
-    addProviders,
+import { TestBed,
     inject,
     fakeAsync,
     tick
@@ -13,7 +13,8 @@ import { BaseRequestOptions, Http, Response, ResponseOptions } from '@angular/ht
 import { provide } from '@angular/core';
 
 describe('Service: User', () => {
-  beforeEach(() => addProviders([
+  beforeEach(() => TestBed.configureTestingModule({
+    providers: [
       BaseRequestOptions,
       MockBackend,
       {
@@ -24,7 +25,8 @@ describe('Service: User', () => {
           deps: [MockBackend, BaseRequestOptions]
       },
       UserService
-  ]));
+    ]
+  }));
 
   afterEach(() => {
     localStorage.removeItem('auth_token');

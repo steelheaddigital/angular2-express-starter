@@ -19,7 +19,7 @@ export class NavbarComponent {
     return this.authService.isLoggedIn();
   } 
   
-  logout(event) {
+  logout(event: Event) {
     event.preventDefault();
     this.authService.logout();
     this.router.navigate(['./home']);

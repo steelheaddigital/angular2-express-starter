@@ -1,11 +1,16 @@
 /* tslint:disable:no-unused-variable */
+/// <reference path="../../typings/globals/jasmine/index.d.ts" />
 
-import { addProviders, async, inject } from '@angular/core/testing';
+import { TestBed, async, inject } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 
 describe('App: Client', () => {
   beforeEach(() => {
-    addProviders([AppComponent]);
+    TestBed.configureTestingModule({
+      providers: [
+        AppComponent
+      ]
+    });
   });
 
   it('should create the app',
