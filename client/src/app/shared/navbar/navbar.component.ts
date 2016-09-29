@@ -1,14 +1,12 @@
 import { Component } from '@angular/core';
-import { ROUTER_DIRECTIVES, Router } from '@angular/router';
-import { CollapseDirective } from 'ng2-bootstrap';
+import { Router } from '@angular/router';
 import { AuthService } from '../../auth/auth.service'
 
 @Component({
   moduleId: module.id,
   selector: 'app-navbar',
   templateUrl: 'navbar.component.html',
-  providers: [AuthService],
-  directives: [ROUTER_DIRECTIVES, CollapseDirective]
+  providers: [AuthService]
 })
 export class NavbarComponent {
   constructor (private authService: AuthService, private router: Router) { }

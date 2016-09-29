@@ -8,7 +8,6 @@ import { TestBed,
     async
 } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { provide } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { LoginComponent } from './login.component';
 import { IJsendResponse } from '../../shared/base.service';
@@ -64,8 +63,8 @@ describe('Component: Login', () => {
             });
           })
         let component = new LoginComponent(mockService.object, router, formBuilder);
-        component.email.updateValue("test@test.com");
-        component.password.updateValue("12345");
+        component.email.setValue("test@test.com");
+        component.password.setValue("12345");
 
         component.login()
 
@@ -88,8 +87,8 @@ describe('Component: Login', () => {
             });
           })
         let component = new LoginComponent(mockService.object, router, formBuilder);
-        component.email.updateValue("test@test.com");
-        component.password.updateValue("12345");
+        component.email.setValue("test@test.com");
+        component.password.setValue("12345");
 
         component.login()
 

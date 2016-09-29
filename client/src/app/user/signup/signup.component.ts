@@ -1,4 +1,4 @@
-import { REACTIVE_FORM_DIRECTIVES, FORM_DIRECTIVES, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { UserService } from '../user.service'
@@ -12,8 +12,7 @@ import 'rxjs/add/operator/take';
   selector: 'app-signup',
   templateUrl: 'signup.component.html',
   styleUrls: ['signup.component.css'],
-  providers: [UserService, FormBuilder],
-  directives: [FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES]
+  providers: [UserService, FormBuilder]
 })
 export class SignupComponent extends BaseFormComponent {
 

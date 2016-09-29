@@ -1,16 +1,15 @@
 import { NgModule }       from '@angular/core';
 import { BrowserModule  } from '@angular/platform-browser';
 import { AppComponent }   from './app.component';
-import { routing,
-         APP_ROUTER_PROVIDERS } from './app.routes';
-import { FormsModule } from '@angular/forms';
+import { routing, APP_ROUTER_PROVIDERS } from './app.routes';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthHttp, AuthConfig, AUTH_PROVIDERS } from 'angular2-jwt';
-import { HTTP_PROVIDERS, HttpModule, Http } from '@angular/http';
-import { provide } from '@angular/core';
+import { HttpModule, Http } from '@angular/http';
 import { NavbarComponent } from './shared/navbar';
 import { HomeComponent } from './home';
 import { SignupComponent } from './user/signup';
 import { LoginComponent } from './auth/login';
+import { CollapseModule } from 'ng2-bootstrap';
 
 @NgModule({
     declarations: [
@@ -23,13 +22,14 @@ import { LoginComponent } from './auth/login';
     imports:      [
         BrowserModule,
         FormsModule,
+        ReactiveFormsModule,
         HttpModule,
+        CollapseModule,
         routing
     ],
     providers: [
         APP_ROUTER_PROVIDERS,
-        HTTP_PROVIDERS,
-        provide(AuthHttp, {
+        { provide: AuthHttp, 
           useFactory: (http) => {
           return new AuthHttp(new AuthConfig({
               headerName: 'Authorization',
@@ -41,7 +41,7 @@ import { LoginComponent } from './auth/login';
           }), http);
           },
           deps: [Http]
-        })
+        }
     ],
     bootstrap:    [AppComponent],
 })

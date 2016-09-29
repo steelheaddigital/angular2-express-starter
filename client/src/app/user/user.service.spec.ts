@@ -10,7 +10,6 @@ import { UserService } from './user.service';
 import { IJsendResponse } from '../shared/base.service';
 import { MockBackend } from '@angular/http/testing';
 import { BaseRequestOptions, Http, Response, ResponseOptions } from '@angular/http';
-import { provide } from '@angular/core';
 
 describe('Service: User', () => {
   beforeEach(() => TestBed.configureTestingModule({

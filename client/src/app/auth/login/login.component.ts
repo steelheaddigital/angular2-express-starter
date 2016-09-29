@@ -1,4 +1,4 @@
-import { FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
@@ -8,8 +8,7 @@ import { BaseFormComponent } from '../../shared/base-form.component';
   moduleId: module.id,
   selector: 'app-login',
   templateUrl: 'login.component.html',
-  providers: [AuthService, FormBuilder],
-  directives: [FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES]
+  providers: [AuthService, FormBuilder]
 })
 export class LoginComponent extends BaseFormComponent {
 

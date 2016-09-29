@@ -11,7 +11,6 @@ import { AuthService } from './auth.service';
 import { IJsendResponse } from '../shared/base.service';
 import { MockBackend, MockConnection } from '@angular/http/testing';
 import { BaseRequestOptions, Http, Response, ResponseOptions } from '@angular/http';
-import { provide } from '@angular/core';
 import * as crypto from 'crypto-js';
 import * as moment from 'moment';
 

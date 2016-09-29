@@ -8,7 +8,6 @@ import { TestBed,
     async
 } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { provide } from '@angular/core';
 import { SignupComponent } from './signup.component';
 import { UserService } from '../user.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
@@ -50,9 +49,9 @@ describe('Component: Signup', () => {
           })
 
         let component = new SignupComponent(mock.object, formBuilder);
-        component.name.updateValue("test");
-        component.email.updateValue("test@test.com");
-        component.password.updateValue("12345");
+        component.name.setValue("test");
+        component.email.setValue("test@test.com");
+        component.password.setValue("12345");
 
         component.signup()
 
@@ -73,9 +72,9 @@ describe('Component: Signup', () => {
           })
 
         let component = new SignupComponent(mock.object, formBuilder);
-        component.name.updateValue("test");
-        component.email.updateValue("test@test.com");
-        component.password.updateValue("12345");
+        component.name.setValue("test");
+        component.email.setValue("test@test.com");
+        component.password.setValue("12345");
 
         component.signup()
 
@@ -98,7 +97,7 @@ describe('Component: Signup', () => {
           })
         let component = new SignupComponent(mock.object, formBuilder);
 
-        (<FormControl>component.signupForm.controls['name']).updateValue("test");
+        (<FormControl>component.signupForm.controls['name']).setValue("test");
         
         tick(500);
 
@@ -117,7 +116,7 @@ describe('Component: Signup', () => {
           })
         let component = new SignupComponent(mock.object, formBuilder);
 
-        (<FormControl>component.signupForm.controls['name']).updateValue("test");
+        (<FormControl>component.signupForm.controls['name']).setValue("test");
         
         tick(500);
 
@@ -136,7 +135,7 @@ describe('Component: Signup', () => {
           })
         let component = new SignupComponent(mock.object, formBuilder);
 
-        (<FormControl>component.signupForm.controls['email']).updateValue("test@test.com");
+        (<FormControl>component.signupForm.controls['email']).setValue("test@test.com");
         
         tick(500);
 
@@ -155,7 +154,7 @@ describe('Component: Signup', () => {
           })
         let component = new SignupComponent(mock.object, formBuilder);
 
-        (<FormControl>component.signupForm.controls['email']).updateValue("test@test.com");
+        (<FormControl>component.signupForm.controls['email']).setValue("test@test.com");
         
         tick(500);
 

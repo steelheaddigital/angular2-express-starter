@@ -7,7 +7,7 @@ export class BaseFormComponent {
   protected handleError(form: FormGroup, error: any) {
     if(error.status === 'fail'){
       for (let propertyName of Object.keys(error.data)) {
-        let formProperty = form.find(propertyName);
+        let formProperty = form.get(propertyName);
         formProperty.setErrors({'serverValidation': true});
       }
       this.serverValidations = error.data;
