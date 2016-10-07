@@ -1,5 +1,5 @@
 /* tslint:disable:no-unused-variable */
-/// <reference path="../../../../typings/globals/jasmine/index.d.ts" />
+/// <reference path="../../../../node_modules/@types/jasmine/index.d.ts" />
 
 import { TestBed,
     inject,
@@ -12,7 +12,7 @@ import { SignupComponent } from './signup.component';
 import { UserService } from '../user.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import * as Rx from 'rxjs/Rx';
-import * as TypeMoq from "typemoq";
+let td = require('testdouble');
 
 describe('Component: Signup', () => {
 
@@ -24,8 +24,8 @@ describe('Component: Signup', () => {
 
   it('should inject SignupComponent and build form',
     inject([FormBuilder],(formBuilder: FormBuilder) => {
-      let mockService: TypeMoq.Mock<UserService> = TypeMoq.Mock.ofType(UserService);
-      let component = new SignupComponent(mockService.object, formBuilder)
+      let mockService: UserService = td.object(UserService)
+      let component = new SignupComponent(mockService, formBuilder)
 
       expect(component).toBeTruthy();
       expect(component.name instanceof FormControl).toBe(true);
@@ -41,21 +41,19 @@ describe('Component: Signup', () => {
   describe('signup method', () => {
     it('should signup user and reset form on success',
       inject([FormBuilder], (formBuilder: FormBuilder) => {
-        let mock: TypeMoq.Mock<UserService> = TypeMoq.Mock.ofType(UserService);
-        mock.setup(x => x.create("test", "test@test.com", "12345"))
-          .returns(() => { return new Rx.Observable<boolean>((observer: Rx.Subscriber<boolean>) => {
-              observer.next(true);
-            });
-          })
+        let mock: UserService = td.object(UserService);
+        td.when(mock.create("test", "test@test.com", "12345"))
+          .thenReturn(new Rx.Observable<boolean>((observer: Rx.Subscriber<boolean>) => {
+            observer.next(true);
+          }))
 
-        let component = new SignupComponent(mock.object, formBuilder);
+        let component = new SignupComponent(mock, formBuilder);
         component.name.setValue("test");
         component.email.setValue("test@test.com");
         component.password.setValue("12345");
 
         component.signup()
 
-        mock.verify(x => x.create("test", "test@test.com", "12345"), TypeMoq.Times.atLeastOnce());
         expect(component.email.value).toBe("");
         expect(component.name.value).toBe("");
         expect(component.password.value).toBe("");
@@ -64,21 +62,19 @@ describe('Component: Signup', () => {
 
     it('should not reset form if signup fails',
       inject([FormBuilder], (formBuilder: FormBuilder) => {
-        let mock: TypeMoq.Mock<UserService> = TypeMoq.Mock.ofType(UserService);
-        mock.setup(x => x.create("test", "test@test.com", "12345"))
-          .returns(() => { return new Rx.Observable<boolean>((observer: Rx.Subscriber<boolean>) => {
-              observer.next(false);
-            });
-          })
+        let mock: UserService = td.object(UserService);
+        td.when(mock.create("test", "test@test.com", "12345"))
+          .thenReturn(new Rx.Observable<boolean>((observer: Rx.Subscriber<boolean>) => {
+            observer.next(false);
+          }))
 
-        let component = new SignupComponent(mock.object, formBuilder);
+        let component = new SignupComponent(mock, formBuilder);
         component.name.setValue("test");
         component.email.setValue("test@test.com");
         component.password.setValue("12345");
 
         component.signup()
 
-        mock.verify(x => x.create("test", "test@test.com", "12345"), TypeMoq.Times.atLeastOnce());
         expect(component.name.value).toBe("test");
         expect(component.email.value).toBe("test@test.com");
         expect(component.password.value).toBe("12345");
@@ -89,13 +85,13 @@ describe('Component: Signup', () => {
   describe('Validations', () => {
     it('should not mark name invalid if it does not exist',
       inject([FormBuilder], fakeAsync((formBuilder: FormBuilder) => {
-        let mock: TypeMoq.Mock<UserService> = TypeMoq.Mock.ofType(UserService);
-        mock.setup(x => x.exists(TypeMoq.It.isAny()))
-          .returns(() => { return new Rx.Observable<boolean>((observer: Rx.Subscriber<boolean>) => {
-              observer.next(false);
-            });
-          })
-        let component = new SignupComponent(mock.object, formBuilder);
+        let mock: UserService = td.object(UserService);
+        td.when(mock.exists(td.matchers.anything()))
+          .thenReturn(new Rx.Observable<boolean>((observer: Rx.Subscriber<boolean>) => {
+            observer.next(false);
+          }))
+
+        let component = new SignupComponent(mock, formBuilder);
 
         (<FormControl>component.signupForm.controls['name']).setValue("test");
         
@@ -108,13 +104,12 @@ describe('Component: Signup', () => {
 
     it('should mark name invalid if it exists',
       inject([FormBuilder], fakeAsync((formBuilder: FormBuilder) => {
-        let mock: TypeMoq.Mock<UserService> = TypeMoq.Mock.ofType(UserService);
-        mock.setup(x => x.exists(TypeMoq.It.isAny()))
-          .returns(() => { return new Rx.Observable<boolean>((observer: Rx.Subscriber<boolean>) => {
-              observer.next(true);
-            });
-          })
-        let component = new SignupComponent(mock.object, formBuilder);
+        let mock: UserService = td.object(UserService);
+        td.when(mock.exists(td.matchers.anything()))
+          .thenReturn(new Rx.Observable<boolean>((observer: Rx.Subscriber<boolean>) => {
+            observer.next(true);
+          }))
+        let component = new SignupComponent(mock, formBuilder);
 
         (<FormControl>component.signupForm.controls['name']).setValue("test");
         
@@ -127,13 +122,12 @@ describe('Component: Signup', () => {
 
     it('should not mark email invalid if it does not exist',
       inject([FormBuilder], fakeAsync((formBuilder: FormBuilder) => {
-        let mock: TypeMoq.Mock<UserService> = TypeMoq.Mock.ofType(UserService);
-        mock.setup(x => x.exists(TypeMoq.It.isAny()))
-          .returns(() => { return new Rx.Observable<boolean>((observer: Rx.Subscriber<boolean>) => {
-              observer.next(false);
-            });
-          })
-        let component = new SignupComponent(mock.object, formBuilder);
+        let mock: UserService = td.object(UserService);
+        td.when(mock.exists(td.matchers.anything()))
+          .thenReturn(new Rx.Observable<boolean>((observer: Rx.Subscriber<boolean>) => {
+            observer.next(false);
+          }))
+        let component = new SignupComponent(mock, formBuilder);
 
         (<FormControl>component.signupForm.controls['email']).setValue("test@test.com");
         
@@ -146,13 +140,12 @@ describe('Component: Signup', () => {
 
     it('should mark email invalid if it exists',
       inject([FormBuilder], fakeAsync((formBuilder: FormBuilder) => {
-        let mock: TypeMoq.Mock<UserService> = TypeMoq.Mock.ofType(UserService);
-        mock.setup(x => x.exists(TypeMoq.It.isAny()))
-          .returns(() => { return new Rx.Observable<boolean>((observer: Rx.Subscriber<boolean>) => {
-              observer.next(true);
-            });
-          })
-        let component = new SignupComponent(mock.object, formBuilder);
+        let mock: UserService = td.object(UserService);
+        td.when(mock.exists(td.matchers.anything()))
+          .thenReturn(new Rx.Observable<boolean>((observer: Rx.Subscriber<boolean>) => {
+            observer.next(true);
+          }))
+        let component = new SignupComponent(mock, formBuilder);
 
         (<FormControl>component.signupForm.controls['email']).setValue("test@test.com");
         

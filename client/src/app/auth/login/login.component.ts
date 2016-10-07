@@ -5,7 +5,6 @@ import { AuthService } from '../auth.service';
 import { BaseFormComponent } from '../../shared/base-form.component';
 
 @Component({
-  moduleId: module.id,
   selector: 'app-login',
   templateUrl: 'login.component.html',
   providers: [AuthService, FormBuilder]

@@ -1,5 +1,5 @@
 /* tslint:disable:no-unused-variable */
-/// <reference path="../../../typings/globals/jasmine/index.d.ts" />
+/// <reference path="../../../node_modules/@types/jasmine/index.d.ts" />
 
 import { By }           from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';

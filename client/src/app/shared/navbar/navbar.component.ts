@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../auth/auth.service'
 
 @Component({
-  moduleId: module.id,
   selector: 'app-navbar',
   templateUrl: 'navbar.component.html',
   providers: [AuthService]

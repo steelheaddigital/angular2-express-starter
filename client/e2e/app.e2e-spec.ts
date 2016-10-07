@@ -1,10 +1,12 @@
-import { ClientPage } from './app.po';
+/// <reference path="../node_modules/@types/jasmine/index.d.ts" />
 
-describe('client App', function() {
-  let page: ClientPage;
+import { ClientMigrationnPage } from './app.po';
+
+describe('client-migrationn App', function() {
+  let page: ClientMigrationnPage;
 
   beforeEach(() => {
-    page = new ClientPage();
+    page = new ClientMigrationnPage();
   });
 
   it('should display Home Page', () => {

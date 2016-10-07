@@ -8,10 +8,9 @@ import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/take';
 
 @Component({
-  moduleId: module.id,
   selector: 'app-signup',
   templateUrl: 'signup.component.html',
-  styleUrls: ['signup.component.css'],
+  styleUrls: ['signup.component.scss'],
   providers: [UserService, FormBuilder]
 })
 export class SignupComponent extends BaseFormComponent {
