@@ -1,5 +1,15 @@
 version: '2'
 services:
+  server:
+    command: ["npm","start"]
+    links:
+     - testdb
+    ports:
+     - "3000:3000"
+    environment:
+      NODE_ENV: test
+      POSTGRES_USER: "test"
+      POSTGRES_PASSWORD: "test"
   testdb:
     env_file: .env
     image: postgres:9.5
@@ -18,16 +28,10 @@ services:
       context: .
       dockerfile: docker/test/Dockerfile
     volumes:
-     - ./:/opt/app
+     - ./client:/opt/app
      - /opt/app/client/node_modules
-     - /opt/app/server/node_modules
-    environment:
-      NODE_ENV: test
-      POSTGRES_USER: "test"
-      POSTGRES_PASSWORD: "test"
     links:
      - testdb
-
 volumes:
   test_data:
 

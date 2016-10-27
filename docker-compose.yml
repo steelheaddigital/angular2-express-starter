@@ -10,8 +10,6 @@ services:
     volumes:
      - ./server:/opt/app/server
      - /opt/app/server/node_modules
-    links:
-     - db
   db:
     env_file: .env
     image: postgres:9.5

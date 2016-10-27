@@ -1,7 +1,9 @@
 version: '2'
 services:
   server:
-    command: ["gulp"] 
+    command: ["gulp"]
+    links:
+     - db
     ports:
      - "3000:3000"
      - "5858:5858"

@@ -2,6 +2,8 @@ version: '2'
 services:
   server:
     command: ["npm","start"]
+    links:
+     - db
     ports:
      - "3000:3000"
     environment:
@@ -14,7 +16,6 @@ services:
     volumes:
      - ./client/dist:/usr/share/html
     links:
-        - app:app
+     - server:server
     ports:
-        - "80:80"
-
+     - "80:80"
