@@ -27,9 +27,7 @@ services:
     build:
       context: .
       dockerfile: docker/test/Dockerfile
-    volumes:
-     - ./client:/opt/app
-     - /opt/app/client/node_modules
+    command: ["ng","test"]
     links:
      - testdb
 volumes:

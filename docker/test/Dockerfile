@@ -1,14 +1,12 @@
-FROM ubuntu:latest
+FROM markadams/chromium-xvfb
+
+WORKDIR /opt/app
 
 RUN apt-get update -q
-RUN apt-get install -yqq wget xvfb libxss1 gconf-service libasound2 libgconf-2-4 libnspr4 libnss3 libpango1.0-0 fonts-liberation libcurl3 xdg-utils libatk1.0-0 libcups2 libgdk-pixbuf2.0-0 libgtk2.0-0 libappindicator1 curl sudo git
-
-#Install Chrome
-RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-RUN dpkg -i google-chrome*.deb
+RUN apt-get install -yqq curl git
 
 # Install NodeJS
-RUN curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
+RUN curl -sL https://deb.nodesource.com/setup_6.x | bash -
 RUN apt-get install -yq nodejs
 
 #Workaround for bug in latest NPM
@@ -22,10 +20,10 @@ RUN npm install -g npm
 # Install Prerequisites
 RUN npm install --quiet -g angular-cli
 
+COPY client/package.json /opt/app/package.json
+RUN npm install
 COPY client /opt/app/
 
-WORKDIR /opt/app
-RUN npm install
 
 
 
