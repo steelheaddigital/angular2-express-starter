@@ -1,6 +1,4 @@
 /* tslint:disable:no-unused-variable */
-/// <reference path="../../../node_modules/@types/crypto-js/index.d.ts" />
-/// <reference path="../../../node_modules/@types/jasmine/index.d.ts" />
 
 import { TestBed,
     inject,

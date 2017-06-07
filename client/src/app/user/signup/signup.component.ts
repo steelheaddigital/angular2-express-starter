@@ -10,8 +10,7 @@ import 'rxjs/add/operator/take';
 @Component({
   selector: 'app-signup',
   templateUrl: 'signup.component.html',
-  styleUrls: ['signup.component.scss'],
-  providers: [UserService, FormBuilder]
+  styleUrls: ['signup.component.scss']
 })
 export class SignupComponent extends BaseFormComponent {
 
@@ -59,8 +58,6 @@ export class SignupComponent extends BaseFormComponent {
   }
 
   private checkUser(control: FormControl, field: string): Observable<any> {
-    //Angular 2 bug causes this to be fired multiple times, once for every keystroke
-    //https://github.com/angular/angular/issues/9120
     return new Observable((obs: any) => {
       control
         .valueChanges

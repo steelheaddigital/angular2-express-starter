@@ -36,11 +36,11 @@ export class AuthService extends BaseService {
       .catch(super.handleError);
   }
 
-  logout() {
+  public logout(): void {
     localStorage.removeItem('auth_token');
   }
 
-  isLoggedIn() {
+  public isLoggedIn(): boolean {
     let token = localStorage.getItem('auth_token')
     let isLoggedIn = token && !this.jwtHelper.isTokenExpired(token);
 

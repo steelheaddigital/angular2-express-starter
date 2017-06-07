@@ -24,25 +24,27 @@ import { CollapseModule } from 'ng2-bootstrap';
         FormsModule,
         ReactiveFormsModule,
         HttpModule,
-        CollapseModule,
+        CollapseModule.forRoot(),
         routing
     ],
     providers: [
         APP_ROUTER_PROVIDERS,
         { provide: AuthHttp, 
-          useFactory: (http) => {
-          return new AuthHttp(new AuthConfig({
-              headerName: 'Authorization',
-              headerPrefix: 'Bearer',
-              tokenName: 'auth_token',
-              tokenGetter: (() => localStorage.getItem(this.tokenName)),
-              noJwtError: false,
-              noTokenScheme: false
-          }), http);
-          },
+          useFactory: authHttp,
           deps: [Http]
         }
     ],
-    bootstrap:    [AppComponent],
+    bootstrap: [AppComponent],
 })
 export class AppModule {}
+export function authHttp(http: Http) {
+    let config: AuthConfig = new AuthConfig({
+        headerName: 'Authorization',
+        headerPrefix: 'Bearer',
+        tokenName: 'auth_token',
+        tokenGetter: (() => localStorage.getItem(this.tokenName)),
+        noJwtError: false,
+        noTokenScheme: false,
+    });
+    return new AuthHttp(config, http);
+}

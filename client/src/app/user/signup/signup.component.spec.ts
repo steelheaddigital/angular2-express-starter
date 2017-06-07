@@ -5,28 +5,46 @@ import { TestBed,
     inject,
     fakeAsync,
     tick,
-    async
+    async,
+    ComponentFixture
 } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { SignupComponent } from './signup.component';
 import { UserService } from '../user.service';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import * as Rx from 'rxjs/Rx';
-let td = require('testdouble');
+import * as Mockito from 'ts-mockito';
 
 describe('Component: Signup', () => {
 
-  beforeEach(() => TestBed.configureTestingModule({
-    providers: [
-      FormBuilder
-    ]
+  let fixture: ComponentFixture<SignupComponent>;
+  let component: SignupComponent;
+  let mockService: UserService;
+
+  beforeEach(async(() => {
+    mockService = Mockito.mock(UserService);
+    TestBed.configureTestingModule({
+      declarations: [ SignupComponent ],
+      imports:[ ReactiveFormsModule ],
+      providers: [
+        FormBuilder
+      ]
+    })
+    .overrideComponent(SignupComponent, {
+      set: {
+        providers: [
+          { provide: UserService, useValue: Mockito.instance(mockService) }
+        ]
+      }
+    });
   }));
 
-  it('should inject SignupComponent and build form',
-    inject([FormBuilder],(formBuilder: FormBuilder) => {
-      let mockService: UserService = td.object(UserService)
-      let component = new SignupComponent(mockService, formBuilder)
+  beforeEach(() => {
+    fixture = TestBed.createComponent(SignupComponent);
+    component = fixture.componentInstance;
+  })
 
+  it('should inject SignupComponent and build form', () => {
       expect(component).toBeTruthy();
       expect(component.name instanceof FormControl).toBe(true);
       expect(component.email instanceof FormControl).toBe(true);
@@ -35,127 +53,111 @@ describe('Component: Signup', () => {
       expect(component.signupForm.contains('name')).toBe(true);
       expect(component.signupForm.contains('email')).toBe(true);
       expect(component.signupForm.contains('password')).toBe(true);
-    })
-  );
+  });
 
   describe('signup method', () => {
-    it('should signup user and reset form on success',
-      inject([FormBuilder], (formBuilder: FormBuilder) => {
-        let mock: UserService = td.object(UserService);
-        td.when(mock.create("test", "test@test.com", "12345"))
-          .thenReturn(new Rx.Observable<boolean>((observer: Rx.Subscriber<boolean>) => {
-            observer.next(true);
-          }))
+    it('should signup user and reset form on success', fakeAsync(() => {
+      Mockito.when(mockService.create("test", "test@test.com", "12345"))
+        .thenReturn(new Rx.Observable<boolean>((observer: Rx.Subscriber<boolean>) => {
+          observer.next(true);
+        }))
+      Mockito.when(mockService.exists(Mockito.anything()))
+        .thenReturn(new Rx.Observable<boolean>((observer: Rx.Subscriber<boolean>) => {
+          observer.next(true);
+        }));
+      
+      component.name.setValue("test");
+      component.email.setValue("test@test.com");
+      component.password.setValue("12345");
+      component.signup();
 
-        let component = new SignupComponent(mock, formBuilder);
-        component.name.setValue("test");
-        component.email.setValue("test@test.com");
-        component.password.setValue("12345");
+      tick(500)
 
-        component.signup()
+      expect(component.email.value).toBe("");
+      expect(component.name.value).toBe("");
+      expect(component.password.value).toBe("");
+    }))
 
-        expect(component.email.value).toBe("");
-        expect(component.name.value).toBe("");
-        expect(component.password.value).toBe("");
-      })
-    )
+    it('should not reset form if signup fails', fakeAsync(() => {
+      Mockito.when(mockService.create("test", "test@test.com", "12345"))
+        .thenReturn(new Rx.Observable<boolean>((observer: Rx.Subscriber<boolean>) => {
+          observer.next(false);
+        }))
+      Mockito.when(mockService.exists(Mockito.anything()))
+        .thenReturn(new Rx.Observable<boolean>((observer: Rx.Subscriber<boolean>) => {
+          observer.next(true);
+        }));
 
-    it('should not reset form if signup fails',
-      inject([FormBuilder], (formBuilder: FormBuilder) => {
-        let mock: UserService = td.object(UserService);
-        td.when(mock.create("test", "test@test.com", "12345"))
-          .thenReturn(new Rx.Observable<boolean>((observer: Rx.Subscriber<boolean>) => {
-            observer.next(false);
-          }))
+      component.name.setValue("test");
+      component.email.setValue("test@test.com");
+      component.password.setValue("12345");
+      component.signup()
 
-        let component = new SignupComponent(mock, formBuilder);
-        component.name.setValue("test");
-        component.email.setValue("test@test.com");
-        component.password.setValue("12345");
+      tick(500);
 
-        component.signup()
-
-        expect(component.name.value).toBe("test");
-        expect(component.email.value).toBe("test@test.com");
-        expect(component.password.value).toBe("12345");
-      })
-    )
+      expect(component.name.value).toBe("test");
+      expect(component.email.value).toBe("test@test.com");
+      expect(component.password.value).toBe("12345");
+    }))
   })
 
   describe('Validations', () => {
-    it('should not mark name invalid if it does not exist',
-      inject([FormBuilder], fakeAsync((formBuilder: FormBuilder) => {
-        let mock: UserService = td.object(UserService);
-        td.when(mock.exists(td.matchers.anything()))
-          .thenReturn(new Rx.Observable<boolean>((observer: Rx.Subscriber<boolean>) => {
-            observer.next(false);
-          }))
+    it('should not mark name invalid if it does not exist', fakeAsync(() => {
+      Mockito.when(mockService.exists(Mockito.anything()))
+        .thenReturn(new Rx.Observable<boolean>((observer: Rx.Subscriber<boolean>) => {
+          observer.next(false);
+        }));
 
-        let component = new SignupComponent(mock, formBuilder);
+      (<FormControl>component.signupForm.controls['name']).setValue("test");
+      
+      tick(500);
 
-        (<FormControl>component.signupForm.controls['name']).setValue("test");
-        
-        tick(500);
+      expect(component.name.valid).toBe(true);
+      expect(component.name.errors).toBe(null);
+    }))
 
-        expect(component.name.valid).toBe(true);
-        expect(component.name.errors).toBe(null);
-      })
-    ))
+    it('should mark name invalid if it exists',fakeAsync(() => {
+      Mockito.when(mockService.exists(Mockito.anything()))
+        .thenReturn(new Rx.Observable<boolean>((observer: Rx.Subscriber<boolean>) => {
+          observer.next(true);
+        }));
 
-    it('should mark name invalid if it exists',
-      inject([FormBuilder], fakeAsync((formBuilder: FormBuilder) => {
-        let mock: UserService = td.object(UserService);
-        td.when(mock.exists(td.matchers.anything()))
-          .thenReturn(new Rx.Observable<boolean>((observer: Rx.Subscriber<boolean>) => {
-            observer.next(true);
-          }))
-        let component = new SignupComponent(mock, formBuilder);
+      (<FormControl>component.signupForm.controls['name']).setValue("test");
+      
 
-        (<FormControl>component.signupForm.controls['name']).setValue("test");
-        
-        tick(500);
+      tick(500);
 
-        expect(component.name.valid).toBe(false);
-        expect(component.name.errors['nameTaken']).toBe(true);
-      })
-    ))
+      expect(component.name.valid).toBe(false);
+      expect(component.name.errors['nameTaken']).toBe(true);
+    }))
 
-    it('should not mark email invalid if it does not exist',
-      inject([FormBuilder], fakeAsync((formBuilder: FormBuilder) => {
-        let mock: UserService = td.object(UserService);
-        td.when(mock.exists(td.matchers.anything()))
-          .thenReturn(new Rx.Observable<boolean>((observer: Rx.Subscriber<boolean>) => {
-            observer.next(false);
-          }))
-        let component = new SignupComponent(mock, formBuilder);
+    it('should not mark email invalid if it does not exist', fakeAsync(() => {
+      Mockito.when(mockService.exists(Mockito.anything()))
+        .thenReturn(new Rx.Observable<boolean>((observer: Rx.Subscriber<boolean>) => {
+          observer.next(false);
+        }));
 
-        (<FormControl>component.signupForm.controls['email']).setValue("test@test.com");
-        
-        tick(500);
+      (<FormControl>component.signupForm.controls['email']).setValue("test@test.com");
+      
+      tick(500);
 
-        expect(component.email.valid).toBe(true);
-        expect(component.email.errors).toBe(null);
-      })
-    ))
+      expect(component.email.valid).toBe(true);
+      expect(component.email.errors).toBe(null);
+    }))
 
-    it('should mark email invalid if it exists',
-      inject([FormBuilder], fakeAsync((formBuilder: FormBuilder) => {
-        let mock: UserService = td.object(UserService);
-        td.when(mock.exists(td.matchers.anything()))
-          .thenReturn(new Rx.Observable<boolean>((observer: Rx.Subscriber<boolean>) => {
-            observer.next(true);
-          }))
-        let component = new SignupComponent(mock, formBuilder);
+    it('should mark email invalid if it exists', fakeAsync(() => {
+      Mockito.when(mockService.exists(Mockito.anything()))
+        .thenReturn(new Rx.Observable<boolean>((observer: Rx.Subscriber<boolean>) => {
+          observer.next(true);
+        }));
 
-        (<FormControl>component.signupForm.controls['email']).setValue("test@test.com");
-        
-        tick(500);
+      (<FormControl>component.signupForm.controls['email']).setValue("test@test.com");
 
-        expect(component.email.valid).toBe(false);
-        expect(component.email.errors['nameTaken']).toBe(true);
-      })
-    ))
+      tick(500);
 
+      expect(component.email.valid).toBe(false);
+      expect(component.email.errors['nameTaken']).toBe(true);
+    }))
   })
 
 });
