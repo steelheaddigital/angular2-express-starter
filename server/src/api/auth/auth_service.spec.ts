@@ -101,7 +101,7 @@ describe('Auth Service', function() {
 
       middleware(req, res, (error) => {
         expect(error.message).to.equal('invalid signature')
-        expect(req.user).to.be.empty
+        expect(req.user).to.be.undefined
         done();
       });
     });
