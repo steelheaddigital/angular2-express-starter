@@ -10,9 +10,11 @@ services:
     volumes:
      - ./server:/opt/app/server
      - /opt/app/server/node_modules
+    depends_on:
+     - db
   db:
     env_file: .env
-    image: postgres:9.5
+    image: postgres:9.6
     restart: always
     ports:
       - "5432:5432"
@@ -20,6 +22,3 @@ services:
       - data:/var/lib/postgresql/data
 volumes:
   data:
-  
-  
-  

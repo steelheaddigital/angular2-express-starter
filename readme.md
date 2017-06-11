@@ -4,25 +4,16 @@ This is a starter template for an Angular2 application with an express JSON API 
 
 Prerequisites
 ============
-Vagrant
-Virtualbox
-
-vagrant-docker-compose plugin
-
-`vagrant plugin install vagrant-docker-compose`
-
-In addition, if using Windows, you will also need the vagrant-winnfsd plugin for NFS support
-
-`plugin install vagrant-winfsd`
+Docker
 
 Install Dev Environment
 =======================
 1. Clone this repo
-2. Install Vagrant and Virtualbox
+2. Install Docker
 3. Copy the sample.env file to a file named .env.  Change the database passwords and session key if you would like.
 4. In the directory where you cloned this repo, run the following to start the server
 
-`vagrant up`
+`docker-compose up -d`
 
 5. On your local machine make sure you have node and npm installed.
 

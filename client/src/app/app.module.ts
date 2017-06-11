@@ -9,6 +9,7 @@ import { NavbarComponent } from './shared/navbar';
 import { HomeComponent } from './home';
 import { SignupComponent } from './user/signup';
 import { LoginComponent } from './auth/login';
+import { UserService } from './user/user.service';
 import { CollapseModule } from 'ng2-bootstrap';
 
 @NgModule({
@@ -32,7 +33,8 @@ import { CollapseModule } from 'ng2-bootstrap';
         { provide: AuthHttp, 
           useFactory: authHttp,
           deps: [Http]
-        }
+        },
+        UserService
     ],
     bootstrap: [AppComponent],
 })

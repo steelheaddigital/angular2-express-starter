@@ -1,4 +1,4 @@
-import {validate, NotEmpty, IsEmail} from "class-validator";
+import {validate, IsNotEmpty, IsEmail} from "class-validator";
 
 export interface Profile{
   name: string;
@@ -13,12 +13,12 @@ export interface Token{
 export class User {
   id: number;
   
-  @NotEmpty({
+  @IsNotEmpty({
     message: 'Name cannot be empty'
   })
   name: string;
   
-  @NotEmpty({
+  @IsNotEmpty({
     message: 'Email cannot be empty'
   })
   @IsEmail(null, {
@@ -26,22 +26,22 @@ export class User {
   })
   email: string;
   
-  @NotEmpty({
+  @IsNotEmpty({
     message: 'Password cannot be empty'
   })
   password: string;
   
-  @NotEmpty({
+  @IsNotEmpty({
     message: 'Salt cannot be empty'
   })
   salt: string;
   
-  @NotEmpty({
+  @IsNotEmpty({
     message: 'Role cannot be empty'
   })
   role: string;
   
-  @NotEmpty({
+  @IsNotEmpty({
     message: 'Provider cannot be empty'
   })
   provider: string;
