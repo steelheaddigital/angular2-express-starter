@@ -10,7 +10,7 @@ import { HomeComponent } from './home';
 import { SignupComponent } from './user/signup';
 import { LoginComponent } from './auth/login';
 import { UserService } from './user/user.service';
-import { CollapseModule } from 'ng2-bootstrap';
+import { CollapseModule } from 'ngx-bootstrap';
 
 @NgModule({
     declarations: [

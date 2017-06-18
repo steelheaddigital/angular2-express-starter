@@ -15,7 +15,7 @@ import { HomeComponent } from '../../home/home.component';
 import { SignupComponent } from '../../user/signup';
 import { LoginComponent } from '../../auth/login';
 import { AppComponent } from '../../app.component';
-import { CollapseModule } from 'ng2-bootstrap';
+import { CollapseModule } from 'ngx-bootstrap';
 import { routes } from '../../app.routes'
 
 describe('Component: Navbar', () => {
