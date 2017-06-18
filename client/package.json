@@ -39,6 +39,7 @@
     "@types/jquery": "^2.0.37",
     "@types/lodash": "4.14.50",
     "@types/node": "~6.0.60",
+    "@types/sinon": "^2.3.1",
     "@types/source-map": "^0.1.28",
     "bootstrap-sass": "^3.3.7",
     "codelyzer": "~3.0.1",
@@ -53,7 +54,6 @@
     "karma-jasmine": "~1.1.0",
     "karma-jasmine-html-reporter": "^0.2.2",
     "protractor": "~5.1.2",
-    "ts-mockito": "^2.0.0",
     "ts-node": "~3.0.6",
     "tslint": "~5.4.3",
     "typescript": "~2.3.4"

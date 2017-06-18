@@ -43,7 +43,7 @@ describe('Service: Auth', () => {
       inject([AuthService, MockBackend], fakeAsync((authService:AuthService, mockBackend:MockBackend) => {
         var result:IJsendResponse;
         mockBackend.connections.subscribe((c: MockConnection) => {
-          expect(c.request.url).toBe('http://192.168.11.3:3000/api/auth/local');
+          expect(c.request.url).toBe('http://localhost:3000/api/auth/local');
           expect(c.request.headers.get('Content-Type')).toBe('application/json')
           expect(c.request.getBody()).toBe(JSON.stringify({ email: 'test@test.com', password: '12345' }));
           let mockResponseBody: IJsendResponse = {
@@ -70,7 +70,7 @@ describe('Service: Auth', () => {
       inject([AuthService, MockBackend], fakeAsync((authService:AuthService, mockBackend:MockBackend) => {
         var result: IJsendResponse;
         mockBackend.connections.subscribe((c: MockConnection) => {
-          expect(c.request.url).toBe('http://192.168.11.3:3000/api/auth/local');
+          expect(c.request.url).toBe('http://localhost:3000/api/auth/local');
           expect(c.request.headers.get('Content-Type')).toBe('application/json')
           expect(c.request.getBody()).toBe(JSON.stringify({ email: 'test@test.com', password: '12345' }));
           let mockResponseBody: IJsendResponse = {

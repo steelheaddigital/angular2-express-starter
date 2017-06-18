@@ -4,7 +4,7 @@ import * as expressJwt from 'express-jwt';
 import { UserService } from '../user/user_service';
 import { Token } from '../user/user_model';
 let config = require('../../../config');
-let compose = require('composable-middleware');
+let compose = require('compose-middleware').compose;
 
 let validateJwt = expressJwt({
   secret: config.sessionSecret
@@ -24,18 +24,15 @@ export class AuthService {
   
   public isAuthenticated() {
     var userService = this._userService
-    return compose()
-      
-      // Validate jwt
-      .use(function(req, res, next) {
+    return compose([
+      function(req, res, next) {
         // allow access_token to be passed through query parameter as well
         if (req.query && req.query.hasOwnProperty('access_token')) {
           req.headers.authorization = 'Bearer ' + req.query.access_token;
         }
         validateJwt(req, res, next);
-      })
-      // Attach user to request
-      .use(function(req, res, next) {
+      },
+      function(req, res, next) {
         userService.getUser(req.user.id)
           .then(user => {
             if (!user) {
@@ -45,7 +42,8 @@ export class AuthService {
             next();
           })
           .catch(err => next(err));
-      });
+      }
+    ])
   }
   
   public hasRole(roleRequired) {
@@ -53,15 +51,16 @@ export class AuthService {
       throw new Error('Required role needs to be set');
     }
 
-    return compose()
-      .use(this.isAuthenticated())
-      .use(function(req, res, next) {
+    return compose([
+      this.isAuthenticated(),
+      function(req, res, next) {
         if (config.userRoles.indexOf(req.user.role) >=
             config.userRoles.indexOf(roleRequired)) {
           next();
         } else {
           res.status(403).end();
         }
-      });
+      }
+    ])
   }
 }

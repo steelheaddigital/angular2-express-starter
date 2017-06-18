@@ -43,7 +43,7 @@ describe('Service: User', () => {
       inject([UserService, MockBackend], fakeAsync((userService:UserService, mockBackend:MockBackend) => {
         var result:boolean;
         mockBackend.connections.subscribe(c => {
-          expect(c.request.url).toBe('http://192.168.11.3:3000/api/user');
+          expect(c.request.url).toBe('http://localhost:3000/api/user');
           let mockResponseBody: IJsendResponse = {
             status: 'success',
             data: {
@@ -67,7 +67,7 @@ describe('Service: User', () => {
       inject([UserService, MockBackend], fakeAsync((userService:UserService, mockBackend:MockBackend) => {
         var result:boolean;
         mockBackend.connections.subscribe(c => {
-          expect(c.request.url).toBe('http://192.168.11.3:3000/api/user');
+          expect(c.request.url).toBe('http://localhost:3000/api/user');
           let mockResponseBody: IJsendResponse = {
             status: 'fail',
             data: null,
@@ -92,7 +92,7 @@ describe('Service: User', () => {
       inject([UserService, MockBackend], fakeAsync((userService:UserService, mockBackend:MockBackend) => {
         var result:boolean;
         mockBackend.connections.subscribe(c => {
-          expect(c.request.url).toBe('http://192.168.11.3:3000/api/user/exists?name=test');
+          expect(c.request.url).toBe('http://localhost:3000/api/user/exists?name=test');
           let mockResponseBody: IJsendResponse = {
             status: 'success',
             data: {
@@ -115,7 +115,7 @@ describe('Service: User', () => {
       inject([UserService, MockBackend], fakeAsync((userService:UserService, mockBackend:MockBackend) => {
         var result:boolean;
         mockBackend.connections.subscribe(c => {
-          expect(c.request.url).toBe('http://192.168.11.3:3000/api/user/exists?name=test');
+          expect(c.request.url).toBe('http://localhost:3000/api/user/exists?name=test');
           let mockResponseBody: IJsendResponse = {
             status: 'success',
             data: {

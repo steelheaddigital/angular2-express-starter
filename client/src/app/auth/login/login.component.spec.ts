@@ -1,23 +1,21 @@
 /* tslint:disable:no-unused-variable */
 /// <reference path="../../../../node_modules/@types/jasmine/index.d.ts" />
 
-import { TestBed,
-    inject,
+import { 
     fakeAsync,
     tick,
-    async,
-    ComponentFixture
+    async
 } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
 import { AuthService } from '../auth.service';
 import { LoginComponent } from './login.component';
 import { IJsendResponse } from '../../shared/base.service';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { APP_BASE_HREF } from '@angular/common';
 import * as Rx from 'rxjs/Rx';
 import { APP_ROUTER_PROVIDERS } from '../../app.routes'
-import * as Mockito from 'ts-mockito';
+import { MockBackend } from '@angular/http/testing';
+import { Http, RequestOptions } from '@angular/http';
 
 describe('Component: Login', () => {
   class MockRouter {
@@ -29,34 +27,21 @@ describe('Component: Login', () => {
   }
 
   let mockRouter = new MockRouter();
-  let fixture: ComponentFixture<LoginComponent>;
   let component: LoginComponent;
-  let mockService: AuthService;
-
-  beforeEach(async(() => {
-    mockService = Mockito.mock(AuthService)
-    TestBed.configureTestingModule({
-        declarations: [ LoginComponent ],
-        imports:[ ReactiveFormsModule ],
-        providers: [
-          FormBuilder,
-          { provide: Router, useValue: mockRouter },
-        ]
-      })
-      .overrideComponent(LoginComponent, {
-        set: {
-          providers: [
-            { provide: AuthService, useValue: Mockito.instance(mockService) }
-          ]
-        }
-      });
-    }
-  ));
+  let service: AuthService;
+  let backend: MockBackend;
+  let spy: any;
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(LoginComponent);
-    component = fixture.componentInstance;
+    backend = new MockBackend();
+    service = new AuthService(new Http(backend, null))
+    component = new LoginComponent(service, <Router><any>mockRouter, new FormBuilder())
   })
+
+  afterEach(() => { 
+    service = null;
+    component = null;
+  });
 
   it('should create an instance', () => {
       expect(component).toBeTruthy();
@@ -69,10 +54,12 @@ describe('Component: Login', () => {
 
   describe('signup method', () => {
     it('should login user and navigate to home page', fakeAsync(() => {
-      Mockito.when(mockService.login("test@test.com", "12345"))
-        .thenReturn(new Rx.Observable<IJsendResponse>((observer: Rx.Subscriber<IJsendResponse>) => {
-            observer.next({'status': 'success', 'data': {}, 'message': ''});
-          }))
+
+      spy = spyOn(service, 'login').and.returnValue(
+        new Rx.Observable<IJsendResponse>((observer: Rx.Subscriber<IJsendResponse>) => {
+          observer.next({'status': 'success', 'data': {}, 'message': ''});
+        })
+      );
 
       component.email.setValue("test@test.com");
       component.password.setValue("12345");
@@ -90,10 +77,11 @@ describe('Component: Login', () => {
     
 
     it('should display errors if login fails', fakeAsync(() => {
-      Mockito.when(mockService.login("test@test.com", "12345"))
-        .thenReturn(new Rx.Observable<IJsendResponse>((observer: Rx.Subscriber<IJsendResponse>) => {
+      spy = spyOn(service, 'login').and.returnValue(
+        new Rx.Observable<IJsendResponse>((observer: Rx.Subscriber<IJsendResponse>) => {
             observer.error({'status': 'fail', 'data': {email: 'invalid email', password: 'invalid password'}, 'message': ''})
-          }))
+        })
+      );
 
       component.email.setValue("test@test.com");
       component.password.setValue("12345");

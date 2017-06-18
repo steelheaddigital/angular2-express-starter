@@ -1,48 +1,56 @@
 /* tslint:disable:no-unused-variable */
 /// <reference path="../../../../node_modules/@types/jasmine/index.d.ts" />
 
-import { TestBed,
-    inject,
+import {
     fakeAsync,
     tick,
     async,
-    ComponentFixture
 } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
+import { Http, RequestOptions } from '@angular/http';
+import { MockBackend } from '@angular/http/testing';
 import { SignupComponent } from './signup.component';
 import { UserService } from '../user.service';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import * as Rx from 'rxjs/Rx';
-import * as Mockito from 'ts-mockito';
+import * as Rx from 'rxjs/Rx';  
 
 describe('Component: Signup', () => {
 
-  let fixture: ComponentFixture<SignupComponent>;
+  // let fixture: ComponentFixture<SignupComponent>;
   let component: SignupComponent;
-  let mockService: UserService;
+  let service: UserService;
+  let backend: MockBackend;
+  let spy: any;
 
-  beforeEach(async(() => {
-    mockService = Mockito.mock(UserService);
-    TestBed.configureTestingModule({
-      declarations: [ SignupComponent ],
-      imports:[ ReactiveFormsModule ],
-      providers: [
-        FormBuilder
-      ]
-    })
-    .overrideComponent(SignupComponent, {
-      set: {
-        providers: [
-          { provide: UserService, useValue: Mockito.instance(mockService) }
-        ]
-      }
-    });
-  }));
+  // beforeEach(async(() => {
+  //   mockService = Mockito.mock(UserService);
+  //   TestBed.configureTestingModule({
+  //     declarations: [ SignupComponent ],
+  //     imports:[ ReactiveFormsModule ],
+  //     providers: [
+  //       FormBuilder
+  //     ]
+  //   })
+  //   .overrideComponent(SignupComponent, {
+  //     set: {
+  //       providers: [
+  //         { provide: UserService, useValue: Mockito.instance(mockService) }
+  //       ]
+  //     }
+  //   });
+  // }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SignupComponent);
-    component = fixture.componentInstance;
+    // fixture = TestBed.createComponent(SignupComponent);
+    // component = fixture.componentInstance;
+    backend = new MockBackend();
+    service = new UserService(new Http(backend, null))
+    component = new SignupComponent(service, new FormBuilder())
   })
+
+  afterEach(() => { 
+    service = null;
+    component = null;
+  });
 
   it('should inject SignupComponent and build form', () => {
       expect(component).toBeTruthy();
@@ -56,16 +64,19 @@ describe('Component: Signup', () => {
   });
 
   describe('signup method', () => {
-    it('should signup user and reset form on success', fakeAsync(() => {
-      Mockito.when(mockService.create("test", "test@test.com", "12345"))
-        .thenReturn(new Rx.Observable<boolean>((observer: Rx.Subscriber<boolean>) => {
+    it('should signup user and reset form on success', fakeAsync(() => { 
+      spyOn(service, 'create').and.returnValue(
+        new Rx.Observable<boolean>((observer: Rx.Subscriber<boolean>) => {
           observer.next(true);
-        }))
-      Mockito.when(mockService.exists(Mockito.anything()))
-        .thenReturn(new Rx.Observable<boolean>((observer: Rx.Subscriber<boolean>) => {
+        })
+      )
+      spyOn(service, 'exists').and.returnValue(
+        new Rx.Observable<boolean>((observer: Rx.Subscriber<boolean>) => {
           observer.next(true);
-        }));
-      
+        })
+      )
+
+
       component.name.setValue("test");
       component.email.setValue("test@test.com");
       component.password.setValue("12345");
@@ -79,14 +90,16 @@ describe('Component: Signup', () => {
     }))
 
     it('should not reset form if signup fails', fakeAsync(() => {
-      Mockito.when(mockService.create("test", "test@test.com", "12345"))
-        .thenReturn(new Rx.Observable<boolean>((observer: Rx.Subscriber<boolean>) => {
+      spyOn(service, 'create').and.returnValue(
+        new Rx.Observable<boolean>((observer: Rx.Subscriber<boolean>) => {
           observer.next(false);
-        }))
-      Mockito.when(mockService.exists(Mockito.anything()))
-        .thenReturn(new Rx.Observable<boolean>((observer: Rx.Subscriber<boolean>) => {
+        })
+      )
+      spyOn(service, 'exists').and.returnValue(
+        new Rx.Observable<boolean>((observer: Rx.Subscriber<boolean>) => {
           observer.next(true);
-        }));
+        })
+      )
 
       component.name.setValue("test");
       component.email.setValue("test@test.com");
@@ -103,12 +116,14 @@ describe('Component: Signup', () => {
 
   describe('Validations', () => {
     it('should not mark name invalid if it does not exist', fakeAsync(() => {
-      Mockito.when(mockService.exists(Mockito.anything()))
-        .thenReturn(new Rx.Observable<boolean>((observer: Rx.Subscriber<boolean>) => {
+      
+      spyOn(service, 'exists').and.returnValue(
+        new Rx.Observable<boolean>((observer: Rx.Subscriber<boolean>) => {
           observer.next(false);
-        }));
+        })
+      )
 
-      (<FormControl>component.signupForm.controls['name']).setValue("test");
+      component.signupForm.controls['name'].setValue("test");
       
       tick(500);
 
@@ -117,12 +132,13 @@ describe('Component: Signup', () => {
     }))
 
     it('should mark name invalid if it exists',fakeAsync(() => {
-      Mockito.when(mockService.exists(Mockito.anything()))
-        .thenReturn(new Rx.Observable<boolean>((observer: Rx.Subscriber<boolean>) => {
+      spyOn(service, 'exists').and.returnValue(
+        new Rx.Observable<boolean>((observer: Rx.Subscriber<boolean>) => {
           observer.next(true);
-        }));
+        })
+      )
 
-      (<FormControl>component.signupForm.controls['name']).setValue("test");
+      component.signupForm.controls['name'].setValue("test");
       
 
       tick(500);
@@ -132,12 +148,13 @@ describe('Component: Signup', () => {
     }))
 
     it('should not mark email invalid if it does not exist', fakeAsync(() => {
-      Mockito.when(mockService.exists(Mockito.anything()))
-        .thenReturn(new Rx.Observable<boolean>((observer: Rx.Subscriber<boolean>) => {
+      spyOn(service, 'exists').and.returnValue(
+        new Rx.Observable<boolean>((observer: Rx.Subscriber<boolean>) => {
           observer.next(false);
-        }));
+        })
+      )
 
-      (<FormControl>component.signupForm.controls['email']).setValue("test@test.com");
+      component.signupForm.controls['email'].setValue("test@test.com");
       
       tick(500);
 
@@ -146,12 +163,13 @@ describe('Component: Signup', () => {
     }))
 
     it('should mark email invalid if it exists', fakeAsync(() => {
-      Mockito.when(mockService.exists(Mockito.anything()))
-        .thenReturn(new Rx.Observable<boolean>((observer: Rx.Subscriber<boolean>) => {
+      spyOn(service, 'exists').and.returnValue(
+        new Rx.Observable<boolean>((observer: Rx.Subscriber<boolean>) => {
           observer.next(true);
-        }));
+        })
+      )
 
-      (<FormControl>component.signupForm.controls['email']).setValue("test@test.com");
+      component.signupForm.controls['email'].setValue("test@test.com");
 
       tick(500);
 
